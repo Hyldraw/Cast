@@ -13,7 +13,7 @@
       height: 100%;
       overflow: hidden;
       font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(to bottom, #000000, #0a1f3d);
+      background: linear-gradient(to bottom, #000a17, #000000, #0a1f3d);
       color: #ffffff;
       background-attachment: fixed;
       background-repeat: no-repeat;
@@ -50,8 +50,38 @@
       pointer-events: auto;
     }
 
-    ::-webkit-scrollbar {
+    /* Scroll personalizado para lista de canais (oculto) */
+    #channelList::-webkit-scrollbar {
       width: 0;
+    }
+
+    /* Scroll visível para categorias em dispositivos móveis */
+    nav::-webkit-scrollbar {
+      height: 6px;
+    }
+
+    nav::-webkit-scrollbar-track {
+      background: #1f2937;
+      border-radius: 3px;
+    }
+
+    nav::-webkit-scrollbar-thumb {
+      background: #374151;
+      border-radius: 3px;
+    }
+
+    nav::-webkit-scrollbar-thumb:hover {
+      background: #4b5563;
+    }
+
+    /* Estilo dos botões de categoria */
+    .category-btn {
+      transition: all 0.2s ease;
+      min-width: fit-content;
+    }
+
+    .category-btn:hover {
+      transform: scale(1.05);
     }
 
     /* Estilo Netflix/Prime Video para o Video.js */
@@ -238,20 +268,20 @@
       <img src="https://i.imgur.com/E7RYiSu.png" alt="PrimeCast" class="h-24 mx-auto" />
     </div>
     <input type="text" id="searchInput" oninput="filterChannels()"
-           class="px-4 py-2 rounded-lg w-full bg-gray-900 text-white relative -mt-2 z-10"
+           class="px-4 py-2 rounded-lg w-full bg-gray-800 text-white relative -mt-2 z-10"
            placeholder="🔍 Buscar canal..." />
   </header>
 
   <!-- Categorias -->
-  <nav class="flex gap-2 px-4 py-2 overflow-x-auto justify-center bg-gray-900">
-    <button class="category-btn bg-blue-600 px-4 py-1 rounded-full text-center" onclick="setCategory('todos')">Todos</button>
-    <button class="category-btn bg-gray-700 px-4 py-1 rounded-full text-center" onclick="setCategory('globos')">Globos</button>
-    <button class="category-btn bg-gray-700 px-4 py-1 rounded-full text-center" onclick="setCategory('abertos')">Abertos</button>
-    <button class="category-btn bg-gray-700 px-4 py-1 rounded-full text-center" onclick="setCategory('noticias')">Notícias</button>
-    <button class="category-btn bg-gray-700 px-4 py-1 rounded-full text-center" onclick="setCategory('esportes')">Esportes</button>
-    <button class="category-btn bg-gray-700 px-4 py-1 rounded-full text-center" onclick="setCategory('filmes')">Filmes</button>
-    <button class="category-btn bg-gray-700 px-4 py-1 rounded-full text-center" onclick="setCategory('desenhos')">Desenhos</button>
-    <button class="category-btn bg-gray-700 px-4 py-1 rounded-full text-center" onclick="setCategory('documentarios')">Documentarios</button>
+  <nav class="flex gap-3 px-4 py-3 overflow-x-auto bg-gray-900" style="scrollbar-width: thin; scrollbar-color: #374151 #1f2937;">
+    <button class="category-btn bg-blue-700 px-4 py-2 rounded-full text-center whitespace-nowrap flex-shrink-0" onclick="setCategory('todos')">Todos</button>
+    <button class="category-btn bg-gray-700 px-4 py-2 rounded-full text-center whitespace-nowrap flex-shrink-0" onclick="setCategory('globos')">Globos</button>
+    <button class="category-btn bg-gray-700 px-4 py-2 rounded-full text-center whitespace-nowrap flex-shrink-0" onclick="setCategory('abertos')">Abertos</button>
+    <button class="category-btn bg-gray-700 px-4 py-2 rounded-full text-center whitespace-nowrap flex-shrink-0" onclick="setCategory('noticias')">Notícias</button>
+    <button class="category-btn bg-gray-700 px-4 py-2 rounded-full text-center whitespace-nowrap flex-shrink-0" onclick="setCategory('esportes')">Esportes</button>
+    <button class="category-btn bg-gray-700 px-4 py-2 rounded-full text-center whitespace-nowrap flex-shrink-0" onclick="setCategory('filmes')">Filmes</button>
+    <button class="category-btn bg-gray-700 px-4 py-2 rounded-full text-center whitespace-nowrap flex-shrink-0" onclick="setCategory('desenhos')">Desenhos</button>
+    <button class="category-btn bg-gray-700 px-4 py-2 rounded-full text-center whitespace-nowrap flex-shrink-0" onclick="setCategory('documentarios')">Documentários</button>
   </nav>
 
   <!-- Lista de Canais -->
@@ -338,7 +368,7 @@
     </div>
 
     <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
-         data-name="Sportv" data-category="esportes"
+         data-name="sportv" data-category="esportes"
          onclick="playChannel('https://aipapai.shop/_temp/sportv.m3u8', 'Sportv', 'https://i.imgur.com/IwO9fQL.png')">
       <img src="https://i.imgur.com/IwO9fQL.png"
            class="w-24 h-24 object-contain mb-2" />
@@ -346,7 +376,7 @@
     </div>
 
     <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
-         data-name="Sportv 2" data-category="esportes"
+         data-name="sportv 2" data-category="esportes"
          onclick="playChannel('https://aipapai.shop/_temp/sportv2.m3u8', 'Sportv 2', 'https://i.imgur.com/Aln0pjU.png')">
       <img src="https://i.imgur.com/Aln0pjU.png"
            class="w-24 h-24 object-contain mb-2" />
@@ -354,11 +384,19 @@
     </div>
 
     <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
-         data-name="Sportv3" data-category="esportes"
+         data-name="sportv3" data-category="esportes"
          onclick="playChannel('https://aipapai.shop/_temp/sportv3.m3u8', 'Sportv 3', 'https://i.imgur.com/FaVJDPa.png')">
       <img src="https://i.imgur.com/FaVJDPa.png"
            class="w-24 h-24 object-contain mb-2" />
       <span class="text-center text-sm font-medium">Sportv 3</span>
+    </div>
+
+    <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
+         data-name="sportv 4" data-category="esportes"
+         onclick="playChannel('https://aipapai.shop/_temp/sportv4.m3u8', 'Sportv 4', 'https://i.imgur.com/IwO9fQL.png')">
+      <img src="https://i.imgur.com/IwO9fQL.png"
+           class="w-24 h-24 object-contain mb-2" />
+      <span class="text-center text-sm font-medium">Sportv 4</span>
     </div>
 
     <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
@@ -471,6 +509,22 @@
       <img src="https://i.imgur.com/ydDYQhX.png"
            class="w-24 h-24 object-contain mb-2" />
       <span class="text-center text-sm font-medium">Premiere 8</span>
+    </div>
+
+    <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
+         data-name="combate" data-category="esportes"
+         onclick="playChannel('https://aipapai.shop/_temp/combate.m3u8', 'Combate', 'https://i.imgur.com/FcwG6VF.png')">
+      <img src="https://i.imgur.com/FcwG6VF.png"
+           class="w-24 h-24 object-contain mb-2" />
+      <span class="text-center text-sm font-medium">Combate</span>
+    </div>
+
+    <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
+         data-name="bandsports" data-category="esportes"
+         onclick="playChannel('https://aipapai.shop/_temp/bandsports.m3u8', 'BandSports', 'https://i.imgur.com/EvLB0J9.png')">
+      <img src="https://i.imgur.com/EvLB0J9.png"
+           class="w-24 h-24 object-contain mb-2" />
+      <span class="text-center text-sm font-medium">BandSports</span>
     </div>
 
     <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
@@ -618,6 +672,14 @@
     </div>
 
     <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
+         data-name="comedy central" data-category="filmes"
+         onclick="playChannel('https://aipapai.shop/_temp/comedycentral.m3u8', 'Comedy Central', 'https://i.imgur.com/eCUhrfA.png')">
+      <img src="https://i.imgur.com/eCUhrfA.png"
+           class="w-24 h-24 object-contain mb-2" />
+      <span class="text-center text-sm font-medium">Comedy Central</span>
+    </div>
+
+    <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
          data-name="studio universal" data-category="filmes"
          onclick="playChannel('https://aipapai.shop/_temp/studiouniversal.m3u8', 'Studio Universla', 'https://i.imgur.com/Kyfw3dt.png')">
       <img src="https://i.imgur.com/Kyfw3dt.png"
@@ -704,6 +766,22 @@
       <img src="https://i.imgur.com/3y9xPav.png"
            class="w-24 h-24 object-contain mb-2" />
       <span class="text-center text-sm font-medium">History</span>
+    </div>
+
+    <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
+         data-name="discovery turbo" data-category="documentarios"
+         onclick="playChannel('https://aipapai.shop/_temp/discoveryturbo.m3u8', 'Discovery Turbo', 'https://i.imgur.com/tOsOcmD.png')">
+      <img src="https://i.imgur.com/tOsOcmD.png"
+           class="w-24 h-24 object-contain mb-2" />
+      <span class="text-center text-sm font-medium">Discovery Turbo</span>
+    </div>
+
+    <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
+         data-name="discovery world" data-category="documentarios"
+         onclick="playChannel('https://aipapai.shop/_temp/discoveryworld.m3u8', 'Discovery World', 'https://i.imgur.com/S7ZxxnK.png')">
+      <img src="https://i.imgur.com/S7ZxxnK.png"
+           class="w-24 h-24 object-contain mb-2" />
+      <span class="text-center text-sm font-medium">Discovery World</span>
     </div>
   </main>
 
