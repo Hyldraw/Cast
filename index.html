@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>PrimeCast</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://unpkg.com/video.js/dist/video-js.min.css" rel="stylesheet" />
+  <script src="https://unpkg.com/video.js/dist/video.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
   <style>
     html, body {
@@ -16,15 +18,6 @@
       background-attachment: fixed;
       background-repeat: no-repeat;
       background-size: cover;
-    }
-
-    :root {
-      --bg-main: linear-gradient(to bottom, #000000, #0a1f3d);
-      --text-main: #ffffff;
-      --bg-card: #1c1c2c;
-      --bg-nav: #111827;
-      --bg-header: ##1d242e;
-      --input-bg: #1f2937;
     }
 
     #channelList {
@@ -60,6 +53,178 @@
     ::-webkit-scrollbar {
       width: 0;
     }
+
+    /* Estilo Netflix/Prime Video para o Video.js */
+    .vjs-theme-urban .vjs-control-bar {
+      background-color: rgba(0, 0, 0, 0.6);
+      font-size: 16px;
+      padding: 10px 15px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    /* Alinhamento dos controles */
+    .vjs-theme-urban .vjs-play-control {
+      order: 1;
+      margin-right: 15px;
+      display: flex;
+      align-items: center;
+      height: 40px;
+    }
+
+    .vjs-theme-urban .vjs-volume-panel {
+      order: 2;
+      margin-right: 15px;
+      display: flex;
+      align-items: center;
+      height: 40px;
+    }
+
+    .vjs-theme-urban .vjs-progress-control {
+      order: 3;
+      flex-grow: 1;
+      margin: 0 15px;
+      display: flex;
+      align-items: center;
+      height: 40px;
+    }
+
+    /* Mostrar apenas segundos */
+    .vjs-theme-urban .vjs-current-time {
+      order: 4;
+      margin-left: 15px;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      height: 40px;
+      line-height: 1;
+    }
+
+    /* Ocultar duração total */
+    .vjs-theme-urban .vjs-duration {
+      display: none !important;
+    }
+
+    /* Remover botão de tela cheia */
+    .vjs-theme-urban .vjs-fullscreen-control {
+      display: none !important;
+    }
+
+    /* Melhorar espaçamento e alinhamento dos elementos */
+    .vjs-theme-urban .vjs-control {
+      margin: 0 2px;
+      display: flex;
+      align-items: center;
+    }
+
+    /* Timeline mais fina e centralizada */
+    .vjs-theme-urban .vjs-progress-holder {
+      height: 4px !important;
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 2px;
+    }
+
+    .vjs-theme-urban .vjs-play-progress {
+      height: 4px !important;
+      border-radius: 2px;
+    }
+
+    /* Centralizar verticalmente todos os controles */
+    .vjs-theme-urban .vjs-control-bar > * {
+      display: flex;
+      align-items: center;
+      height: 40px;
+    }
+
+    .vjs-theme-urban .vjs-big-play-button {
+      font-size: 3em;
+      border: none;
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      top: 45%;
+      left: 45%;
+    }
+
+    .vjs-theme-urban .vjs-control {
+      color: white;
+    }
+
+    .vjs-theme-urban .vjs-slider {
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    .vjs-theme-urban .vjs-play-progress,
+    .vjs-theme-urban .vjs-volume-level {
+      background-color: #1db954;
+    }
+
+    .vjs-theme-urban .vjs-loading-spinner {
+      border: 6px solid rgba(255,255,255,0.2);
+      border-top: 6px solid #1db954;
+    }
+
+    .video-js {
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    .vjs-theme-urban .vjs-control:focus {
+      outline: none;
+    }
+
+    /* Barra do canal no topo do player */
+    #playerHeader {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 50px;
+      background: rgba(0, 0, 0, 0.75);
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      color: white;
+      z-index: 1000;
+      transition: opacity 0.3s ease;
+      opacity: 1;
+    }
+    #playerHeader.hide {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    #playerHeader img {
+      height: 32px;
+      width: 32px;
+      object-fit: contain;
+      margin-right: 12px;
+      border-radius: 4px;
+      flex-shrink: 0;
+    }
+
+    #playerHeader .channel-name {
+      flex-grow: 1;
+      font-weight: 600;
+      font-size: 1.1rem;
+      user-select: none;
+    }
+
+    #playerHeader button.close-btn {
+      background: transparent;
+      border: none;
+      color: white;
+      font-size: 24px;
+      cursor: pointer;
+      padding: 0 8px;
+      user-select: none;
+      transition: color 0.2s ease;
+    }
+    #playerHeader button.close-btn:hover {
+      color: #ff5555;
+    }
   </style>
 </head>
 <body class="flex flex-col">
@@ -68,20 +233,18 @@
   <audio id="clickSound" src="https://assets.mixkit.co/sfx/preview/mixkit-select-click-1109.mp3" preload="auto"></audio>
 
   <!-- Topo -->
-  <header class="p-4" style="background: var(--bg-header);">
+  <header class="p-4">
     <div class="text-center mb-4">
-      <img src="https://i.imgur.com/tpiw9ZL.png" alt="PrimeCast" class="h-24 mx-auto" />
+      <img src="https://i.imgur.com/E7RYiSu.png" alt="PrimeCast" class="h-24 mx-auto" />
     </div>
     <input type="text" id="searchInput" oninput="filterChannels()"
-           style="background: var(--input-bg); color: var(--text-main);"
-           class="px-4 py-2 rounded-lg w-full relative -mt-2 z-10"
+           class="px-4 py-2 rounded-lg w-full bg-gray-900 text-white relative -mt-2 z-10"
            placeholder="🔍 Buscar canal..." />
   </header>
 
   <!-- Categorias -->
-  <nav class="flex gap-2 px-4 py-2 overflow-x-auto justify-center" style="background: var(--bg-nav);">
-    <button class="category-btn bg-blue-600 px-4 py-1 rounded-full text-center" 
-onclick="setCategory('todos')">Todos</button>
+  <nav class="flex gap-2 px-4 py-2 overflow-x-auto justify-center bg-gray-900">
+    <button class="category-btn bg-blue-600 px-4 py-1 rounded-full text-center" onclick="setCategory('todos')">Todos</button>
     <button class="category-btn bg-gray-700 px-4 py-1 rounded-full text-center" onclick="setCategory('globos')">Globos</button>
     <button class="category-btn bg-gray-700 px-4 py-1 rounded-full text-center" onclick="setCategory('abertos')">Abertos</button>
     <button class="category-btn bg-gray-700 px-4 py-1 rounded-full text-center" onclick="setCategory('noticias')">Notícias</button>
@@ -96,7 +259,7 @@ onclick="setCategory('todos')">Todos</button>
     <!-- Canal -->
     <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
          data-name="globosp" data-category="globos"
-         onclick="playChannel('https://aipapai.shop/_temp/globosp.m3u8')">
+         onclick="playChannel('https://aipapai.shop/_temp/globosp.m3u8', 'Gobo SP', 'https://i.imgur.com/aYKmlmc.png')">
       <img src="https://i.imgur.com/aYKmlmc.png"
            class="w-24 h-24 object-contain mb-2" />
       <span class="text-center text-sm font-medium">Globo SP</span>
@@ -104,7 +267,7 @@ onclick="setCategory('todos')">Todos</button>
 
     <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
          data-name="globorj" data-category="globos"
-         onclick="playChannel('https://aipapai.shop/_temp/globorj.m3u8')">
+         onclick="playChannel('https://aipapai.shop/_temp/globorj.m3u8', 'Globo RJ', 'https://i.imgur.com/aYKmlmc.png')">
       <img src="https://i.imgur.com/aYKmlmc.png"
            class="w-24 h-24 object-contain mb-2" />
       <span class="text-center text-sm font-medium">Globo RJ</span>
@@ -112,7 +275,7 @@ onclick="setCategory('todos')">Todos</button>
 
     <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
          data-name="cultura" data-category="abertos"
-         onclick="playChannel('https://aipapai.shop/_temp/cultura.m3u8')">
+         onclick="playChannel('https://aipapai.shop/_temp/cultura.m3u8', 'TV Cultura', 'https://i.imgur.com/PJLJzdW.png')">
       <img src="https://i.imgur.com/PJLJzdW.png"
            class="w-24 h-24 object-contain mb-2" />
       <span class="text-center text-sm font-medium">TV Cultura</span>
@@ -120,7 +283,7 @@ onclick="setCategory('todos')">Todos</button>
 
     <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
          data-name="record" data-category="abertos"
-         onclick="playChannel('https://aipapai.shop/_temp/record.m3u8')">
+         onclick="playChannel('https://aipapai.shop/_temp/record.m3u8', 'Record', 'https://i.imgur.com/SehYFaG.png')">
       <img src="https://i.imgur.com/SehYFaG.png"
            class="w-24 h-24 object-contain mb-2" />
       <span class="text-center text-sm font-medium">Record</span>
@@ -128,7 +291,7 @@ onclick="setCategory('todos')">Todos</button>
 
     <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
          data-name="redetv" data-category="abertos"
-         onclick="playChannel('https://aipapai.shop/_temp/redetv.m3u8')">
+         onclick="playChannel('https://aipapai.shop/_temp/redetv.m3u8', 'RedeTV!', 'https://i.imgur.com/uKSf0kb.png')">
       <img src="https://i.imgur.com/uKSf0kb.png"
            class="w-24 h-24 object-contain mb-2" />
       <span class="text-center text-sm font-medium">RedeTV!</span>
@@ -136,7 +299,7 @@ onclick="setCategory('todos')">Todos</button>
 
     <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
          data-name="sbt" data-category="abertos"
-         onclick="playChannel('https://aipapai.shop/_temp/sbt.m3u8')">
+         onclick="playChannel('https://aipapai.shop/_temp/sbt.m3u8', 'SBT', 'https://i.imgur.com/Orcyltp.png')">
       <img src="https://i.imgur.com/Orcyltp.png"
            class="w-24 h-24 object-contain mb-2" />
       <span class="text-center text-sm font-medium">SBT</span>
@@ -144,7 +307,7 @@ onclick="setCategory('todos')">Todos</button>
 
     <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
          data-name="band" data-category="abertos"
-         onclick="playChannel('https://aipapai.shop/_temp/band.m3u8')">
+         onclick="playChannel('https://aipapai.shop/_temp/band.m3u8', 'Band', 'https://i.imgur.com/QZgrKOf.png')">
       <img src="https://i.imgur.com/QZgrKOf.png"
            class="w-24 h-24 object-contain mb-2" />
       <span class="text-center text-sm font-medium">Band</span>
@@ -152,7 +315,7 @@ onclick="setCategory('todos')">Todos</button>
 
     <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
          data-name="globo news" data-category="noticias"
-         onclick="playChannel('https://aipapai.shop/_temp/globonews.m3u8')">
+         onclick="playChannel('https://aipapai.shop/_temp/globonews.m3u8', 'Globo News', 'https://i.imgur.com/CCEg0km.png')">
       <img src="https://i.imgur.com/CCEg0km.png"
            class="w-24 h-24 object-contain mb-2" />
       <span class="text-center text-sm font-medium">Globo News</span>
@@ -160,7 +323,7 @@ onclick="setCategory('todos')">Todos</button>
 
     <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
          data-name="band news" data-category="noticias"
-         onclick="playChannel('https://aipapai.shop/_temp/bandnews.m3u8')">
+         onclick="playChannel('https://aipapai.shop/_temp/bandnews.m3u8', 'Band News', 'https://i.imgur.com/uzNyEV4.png')">
       <img src="https://i.imgur.com/uzNyEV4.png"
            class="w-24 h-24 object-contain mb-2" />
       <span class="text-center text-sm font-medium">Band News</span>
@@ -168,7 +331,7 @@ onclick="setCategory('todos')">Todos</button>
 
     <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
          data-name="record news" data-category="noticias"
-         onclick="playChannel('https://aipapai.shop/_temp/recordnews.m3u8')">
+         onclick="playChannel('https://aipapai.shop/_temp/recordnews.m3u8', 'Record News', 'https://i.imgur.com/OlccJ9t.png')">
       <img src="https://i.imgur.com/OlccJ9t.png"
            class="w-24 h-24 object-contain mb-2" />
       <span class="text-center text-sm font-medium">Record News</span>
@@ -176,7 +339,7 @@ onclick="setCategory('todos')">Todos</button>
 
     <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
          data-name="Sportv" data-category="esportes"
-         onclick="playChannel('https://aipapai.shop/_temp/sportv.m3u8')">
+         onclick="playChannel('https://aipapai.shop/_temp/sportv.m3u8', 'Sportv', 'https://i.imgur.com/IwO9fQL.png')">
       <img src="https://i.imgur.com/IwO9fQL.png"
            class="w-24 h-24 object-contain mb-2" />
       <span class="text-center text-sm font-medium">Sportv</span>
@@ -184,7 +347,7 @@ onclick="setCategory('todos')">Todos</button>
 
     <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
          data-name="Sportv 2" data-category="esportes"
-         onclick="playChannel('https://aipapai.shop/_temp/sportv2.m3u8')">
+         onclick="playChannel('https://aipapai.shop/_temp/sportv2.m3u8', 'Sportv 2', 'https://i.imgur.com/Aln0pjU.png')">
       <img src="https://i.imgur.com/Aln0pjU.png"
            class="w-24 h-24 object-contain mb-2" />
       <span class="text-center text-sm font-medium">Sportv 2</span>
@@ -192,7 +355,7 @@ onclick="setCategory('todos')">Todos</button>
 
     <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
          data-name="Sportv3" data-category="esportes"
-         onclick="playChannel('https://aipapai.shop/_temp/sportv3.m3u8')">
+         onclick="playChannel('https://aipapai.shop/_temp/sportv3.m3u8', 'Sportv 3', 'https://i.imgur.com/FaVJDPa.png')">
       <img src="https://i.imgur.com/FaVJDPa.png"
            class="w-24 h-24 object-contain mb-2" />
       <span class="text-center text-sm font-medium">Sportv 3</span>
@@ -200,7 +363,7 @@ onclick="setCategory('todos')">Todos</button>
 
     <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
          data-name="espn" data-category="esportes"
-         onclick="playChannel('https://aipapai.shop/_temp/espn.m3u8')">
+         onclick="playChannel('https://aipapai.shop/_temp/espn.m3u8', 'Espn', 'https://i.imgur.com/AUdOPW0.png')">
       <img src="https://i.imgur.com/AUdOPW0.png"
            class="w-24 h-24 object-contain mb-2" />
       <span class="text-center text-sm font-medium">Espn</span>
@@ -208,7 +371,7 @@ onclick="setCategory('todos')">Todos</button>
 
     <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
          data-name="espn2" data-category="esportes"
-         onclick="playChannel('https://aipapai.shop/_temp/espn2.m3u8')">
+         onclick="playChannel('https://aipapai.shop/_temp/espn2.m3u8', 'Espn 2', 'https://i.imgur.com/s2YAxM9.png')">
       <img src="https://i.imgur.com/s2YAxM9.png"
            class="w-24 h-24 object-contain mb-2" />
       <span class="text-center text-sm font-medium">Espn 2</span>
@@ -216,7 +379,7 @@ onclick="setCategory('todos')">Todos</button>
 
     <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
          data-name="espn3" data-category="esportes"
-         onclick="playChannel('https://aipapai.shop/_temp/espn3.m3u8')">
+         onclick="playChannel('https://aipapai.shop/_temp/espn3.m3u8', 'Espn 3', 'https://i.imgur.com/zctUday.png')">
       <img src="https://i.imgur.com/zctUday.png"
            class="w-24 h-24 object-contain mb-2" />
       <span class="text-center text-sm font-medium">Espn 3</span>
@@ -224,7 +387,7 @@ onclick="setCategory('todos')">Todos</button>
 
     <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
          data-name="espn4" data-category="esportes"
-         onclick="playChannel('https://aipapai.shop/_temp/espn4.m3u8')">
+         onclick="playChannel('https://aipapai.shop/_temp/espn4.m3u8', 'Espn 4', 'https://i.imgur.com/k3iSdJx.png')">
       <img src="https://i.imgur.com/k3iSdJx.png"
            class="w-24 h-24 object-contain mb-2" />
       <span class="text-center text-sm font-medium">Espn 4</span>
@@ -232,7 +395,7 @@ onclick="setCategory('todos')">Todos</button>
 
     <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
          data-name="espn5" data-category="esportes"
-         onclick="playChannel('https://aipapai.shop/_temp/espn5.m3u8')">
+         onclick="playChannel('https://aipapai.shop/_temp/espn5.m3u8', 'Espn 5', 'https://i.imgur.com/7YScj1R.png')">
       <img src="https://i.imgur.com/7YScj1R.png"
            class="w-24 h-24 object-contain mb-2" />
       <span class="text-center text-sm font-medium">Espn 5</span>
@@ -240,7 +403,7 @@ onclick="setCategory('todos')">Todos</button>
 
     <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
          data-name="espn6" data-category="esportes"
-         onclick="playChannel('https://aipapai.shop/_temp/espn6.m3u8')">
+         onclick="playChannel('https://aipapai.shop/_temp/espn6.m3u8', 'Espn 6', 'https://i.imgur.com/dtWJKS6.png')">
       <img src="https://i.imgur.com/dtWJKS6.png"
            class="w-24 h-24 object-contain mb-2" />
       <span class="text-center text-sm font-medium">Espn 6</span>
@@ -248,7 +411,7 @@ onclick="setCategory('todos')">Todos</button>
 
     <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
          data-name="premiere" data-category="esportes"
-         onclick="playChannel('https://aipapai.shop/_temp/premiere.m3u8')">
+         onclick="playChannel('https://aipapai.shop/_temp/premiere.m3u8', 'Premiere 1', 'https://i.imgur.com/ydDYQhX.png')">
       <img src="https://i.imgur.com/ydDYQhX.png"
            class="w-24 h-24 object-contain mb-2" />
       <span class="text-center text-sm font-medium">Premiere</span>
@@ -256,7 +419,7 @@ onclick="setCategory('todos')">Todos</button>
 
     <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
          data-name="premiere2" data-category="esportes"
-         onclick="playChannel('https://aipapai.shop/_temp/premiere2.m3u8')">
+         onclick="playChannel('https://aipapai.shop/_temp/premiere2.m3u8', 'Premiere 2', 'https://i.imgur.com/ydDYQhX.png')">
       <img src="https://i.imgur.com/ydDYQhX.png"
            class="w-24 h-24 object-contain mb-2" />
       <span class="text-center text-sm font-medium">Premiere 2</span>
@@ -264,7 +427,7 @@ onclick="setCategory('todos')">Todos</button>
 
     <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
          data-name="premiere3" data-category="esportes"
-         onclick="playChannel('https://aipapai.shop/_temp/premiere3.m3u8')">
+         onclick="playChannel('https://aipapai.shop/_temp/premiere3.m3u8', 'Premiere 3', 'https://i.imgur.com/ydDYQhX.png')">
       <img src="https://i.imgur.com/ydDYQhX.png"
            class="w-24 h-24 object-contain mb-2" />
       <span class="text-center text-sm font-medium">Premiere 3</span>
@@ -272,7 +435,7 @@ onclick="setCategory('todos')">Todos</button>
 
     <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
          data-name="premiere4" data-category="esportes"
-         onclick="playChannel('https://aipapai.shop/_temp/premiere4.m3u8')">
+         onclick="playChannel('https://aipapai.shop/_temp/premiere4.m3u8', 'Premiere 4', 'https://i.imgur.com/ydDYQhX.png')">
       <img src="https://i.imgur.com/ydDYQhX.png"
            class="w-24 h-24 object-contain mb-2" />
       <span class="text-center text-sm font-medium">Premiere 4</span>
@@ -280,7 +443,7 @@ onclick="setCategory('todos')">Todos</button>
 
     <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
          data-name="premiere5" data-category="esportes"
-         onclick="playChannel('https://aipapai.shop/_temp/premiere5.m3u8')">
+         onclick="playChannel('https://aipapai.shop/_temp/premiere5.m3u8', 'Premiere 5', 'https://i.imgur.com/ydDYQhX.png')">
       <img src="https://i.imgur.com/ydDYQhX.png"
            class="w-24 h-24 object-contain mb-2" />
       <span class="text-center text-sm font-medium">Premiere 5</span>
@@ -288,7 +451,7 @@ onclick="setCategory('todos')">Todos</button>
 
     <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
          data-name="premiere6" data-category="esportes"
-         onclick="playChannel('https://aipapai.shop/_temp/premiere6.m3u8')">
+         onclick="playChannel('https://aipapai.shop/_temp/premiere6.m3u8', 'Premiere 6', 'https://i.imgur.com/ydDYQhX.png')">
       <img src="https://i.imgur.com/ydDYQhX.png"
            class="w-24 h-24 object-contain mb-2" />
       <span class="text-center text-sm font-medium">Premiere 6</span>
@@ -296,7 +459,7 @@ onclick="setCategory('todos')">Todos</button>
 
     <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
          data-name="premiere7" data-category="esportes"
-         onclick="playChannel('https://aipapai.shop/_temp/premiere7.m3u8')">
+         onclick="playChannel('https://aipapai.shop/_temp/premiere7.m3u8', 'Premiere 7', 'https://i.imgur.com/ydDYQhX.png')">
       <img src="https://i.imgur.com/ydDYQhX.png"
            class="w-24 h-24 object-contain mb-2" />
       <span class="text-center text-sm font-medium">Premiere 7</span>
@@ -304,7 +467,7 @@ onclick="setCategory('todos')">Todos</button>
 
     <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
          data-name="premiere8" data-category="esportes"
-         onclick="playChannel('https://aipapai.shop/_temp/premiere8.m3u8')">
+         onclick="playChannel('https://aipapai.shop/_temp/premiere8.m3u8', 'Premiere 8', 'https://i.imgur.com/ydDYQhX.png')">
       <img src="https://i.imgur.com/ydDYQhX.png"
            class="w-24 h-24 object-contain mb-2" />
       <span class="text-center text-sm font-medium">Premiere 8</span>
@@ -312,7 +475,7 @@ onclick="setCategory('todos')">Todos</button>
 
     <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
          data-name="telecine premium" data-category="filmes"
-         onclick="playChannel('https://aipapai.shop/_temp/telecinepremium.m3u8')">
+         onclick="playChannel('https://aipapai.shop/_temp/telecinepremium.m3u8', 'Telecine Premium', 'https://i.imgur.com/cV566mo.png')">
       <img src="https://i.imgur.com/cV566mo.png"
            class="w-24 h-24 object-contain mb-2" />
       <span class="text-center text-sm font-medium">Telecine Premium</span>
@@ -320,7 +483,7 @@ onclick="setCategory('todos')">Todos</button>
 
     <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
          data-name="telecine action" data-category="filmes"
-         onclick="playChannel('https://aipapai.shop/_temp/telecineaction.m3u8')">
+         onclick="playChannel('https://aipapai.shop/_temp/telecineaction.m3u8', 'Telecine Action', 'https://i.imgur.com/qmnXGnZ.png')">
       <img src="https://i.imgur.com/qmnXGnZ.png"
            class="w-24 h-24 object-contain mb-2" />
       <span class="text-center text-sm font-medium">Telecine Action</span>
@@ -328,7 +491,7 @@ onclick="setCategory('todos')">Todos</button>
 
     <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
          data-name="Telecine touch" data-category="filmes"
-         onclick="playChannel('https://aipapai.shop/_temp/telecinetouch.m3u8')">
+         onclick="playChannel('https://aipapai.shop/_temp/telecinetouch.m3u8', 'Telecine Touch', 'https://i.imgur.com/451znaq.png')">
       <img src="https://i.imgur.com/451znaq.png"
            class="w-24 h-24 object-contain mb-2" />
       <span class="text-center text-sm font-medium">Telecine Touch</span>
@@ -336,7 +499,7 @@ onclick="setCategory('todos')">Todos</button>
     
     <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
          data-name="telecine pipoca" data-category="filmes"
-         onclick="playChannel('https://aipapai.shop/_temp/telecinepipoca.m3u8')">
+         onclick="playChannel('https://aipapai.shop/_temp/telecinepipoca.m3u8', 'Telecine Pipoca', 'https://i.imgur.com/WCiEiEi.png')">
       <img src="https://i.imgur.com/WCiEiEi.png"
            class="w-24 h-24 object-contain mb-2" />
       <span class="text-center text-sm font-medium">Telecine Pipoca</span>
@@ -344,7 +507,7 @@ onclick="setCategory('todos')">Todos</button>
 
     <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
          data-name="telecine fun" data-category="filmes"
-         onclick="playChannel('https://aipapai.shop/_temp/telecinefun.m3u8')">
+         onclick="playChannel('https://aipapai.shop/_temp/telecinefun.m3u8', 'Telecine Fun', 'https://i.imgur.com/2jU1LhG.png')">
       <img src="https://i.imgur.com/2jU1LhG.png"
            class="w-24 h-24 object-contain mb-2" />
       <span class="text-center text-sm font-medium">Telecine Fun</span>
@@ -352,7 +515,7 @@ onclick="setCategory('todos')">Todos</button>
 
     <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
          data-name="telecine cult" data-category="filmes"
-         onclick="playChannel('https://aipapai.shop/_temp/telecinecult.m3u8')">
+         onclick="playChannel('https://aipapai.shop/_temp/telecinecult.m3u8', 'Telecine Cult', 'https://i.imgur.com/smmPlAJ.png')">
       <img src="https://i.imgur.com/smmPlAJ.png"
            class="w-24 h-24 object-contain mb-2" />
       <span class="text-center text-sm font-medium">Telecine Cult</span>
@@ -360,7 +523,7 @@ onclick="setCategory('todos')">Todos</button>
 
     <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
          data-name="megapix" data-category="filmes"
-         onclick="playChannel('https://aipapai.shop/_temp/megapix.m3u8')">
+         onclick="playChannel('https://aipapai.shop/_temp/megapix.m3u8', 'Megapix', 'https://i.imgur.com/5myVSRr.png')">
       <img src="https://i.imgur.com/5myVSRr.png"
            class="w-24 h-24 object-contain mb-2" />
       <span class="text-center text-sm font-medium">Megapix</span>
@@ -368,7 +531,7 @@ onclick="setCategory('todos')">Todos</button>
 
     <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
          data-name="hbo" data-category="filmes"
-         onclick="playChannel('https://aipapai.shop/_temp/hbo.m3u8')">
+         onclick="playChannel('https://aipapai.shop/_temp/hbo.m3u8', 'HBO', 'https://i.imgur.com/IGXN8IE.png')">
       <img src="https://i.imgur.com/IGXN8IE.png"
            class="w-24 h-24 object-contain mb-2" />
       <span class="text-center text-sm font-medium">HBO</span>
@@ -376,7 +539,7 @@ onclick="setCategory('todos')">Todos</button>
 
     <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
          data-name="hbo2" data-category="filmes"
-         onclick="playChannel('https://aipapai.shop/_temp/hbo2.m3u8')">
+         onclick="playChannel('https://aipapai.shop/_temp/hbo2.m3u8', 'HBO2', 'https://i.imgur.com/To2YHqn.png')">
       <img src="https://i.imgur.com/To2YHqn.png"
            class="w-24 h-24 object-contain mb-2" />
       <span class="text-center text-sm font-medium">HBO2</span>
@@ -384,7 +547,7 @@ onclick="setCategory('todos')">Todos</button>
 
     <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
          data-name="hbo plus" data-category="filmes"
-         onclick="playChannel('https://aipapai.shop/_temp/hboplus.m3u8')">
+         onclick="playChannel('https://aipapai.shop/_temp/hboplus.m3u8', 'HBO Plus', 'https://i.imgur.com/GyzT999.png')">
       <img src="https://i.imgur.com/GyzT999.png"
            class="w-24 h-24 object-contain mb-2" />
       <span class="text-center text-sm font-medium">HBO Plus</span>
@@ -392,7 +555,7 @@ onclick="setCategory('todos')">Todos</button>
 
     <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
          data-name="hbo signature" data-category="filmes"
-         onclick="playChannel('https://aipapai.shop/_temp/hbosignature.m3u8')">
+         onclick="playChannel('https://aipapai.shop/_temp/hbosignature.m3u8', 'HBO Signature', 'https://i.imgur.com/NbxNXKv.png')">
       <img src="https://i.imgur.com/NbxNXKv.png"
            class="w-24 h-24 object-contain mb-2" />
       <span class="text-center text-sm font-medium">HBO Signature</span>
@@ -400,7 +563,7 @@ onclick="setCategory('todos')">Todos</button>
 
     <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
          data-name="hbo family" data-category="filmes"
-         onclick="playChannel('https://aipapai.shop/_temp/hbofamily.m3u8')">
+         onclick="playChannel('https://aipapai.shop/_temp/hbofamily.m3u8', 'HBO Family', 'https://i.imgur.com/bQLjCq0.png')">
       <img src="https://i.imgur.com/bQLjCq0.png"
            class="w-24 h-24 object-contain mb-2" />
       <span class="text-center text-sm font-medium">HBO Family</span>
@@ -408,7 +571,7 @@ onclick="setCategory('todos')">Todos</button>
 
     <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
          data-name="hbo mundi" data-category="filmes"
-         onclick="playChannel('https://aipapai.shop/_temp/hbomundi.m3u8')">
+         onclick="playChannel('https://aipapai.shop/_temp/hbomundi.m3u8', 'HBO Mundi', 'https://i.imgur.com/uGWWNK3.png')">
       <img src="https://i.imgur.com/uGWWNK3.png"
            class="w-24 h-24 object-contain mb-2" />
       <span class="text-center text-sm font-medium">HBO Mundi</span>
@@ -416,7 +579,7 @@ onclick="setCategory('todos')">Todos</button>
 
     <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
          data-name="hbo xtreme" data-category="filmes"
-         onclick="playChannel('https://aipapai.shop/_temp/hboxtreme.m3u8')">
+         onclick="playChannel('https://aipapai.shop/_temp/hboxtreme.m3u8', 'HBO Xtreme', 'https://i.imgur.com/M5Z7VPy.png')">
       <img src="https://i.imgur.com/M5Z7VPy.png"
            class="w-24 h-24 object-contain mb-2" />
       <span class="text-center text-sm font-medium">HBO Xtreme</span>
@@ -424,7 +587,7 @@ onclick="setCategory('todos')">Todos</button>
 
     <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
          data-name="hbo pop" data-category="filmes"
-         onclick="playChannel('https://aipapai.shop/_temp/hbopop.m3u8')">
+         onclick="playChannel('https://aipapai.shop/_temp/hbopop.m3u8', 'HBO POP', 'https://i.imgur.com/ThoE1JB.png')">
       <img src="https://i.imgur.com/ThoE1JB.png"
            class="w-24 h-24 object-contain mb-2" />
       <span class="text-center text-sm font-medium">HBO Pop</span>
@@ -432,7 +595,7 @@ onclick="setCategory('todos')">Todos</button>
 
     <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
          data-name="sony channel" data-category="filmes"
-         onclick="playChannel('https://aipapai.shop/_temp/sonychannel.m3u8')">
+         onclick="playChannel('https://aipapai.shop/_temp/sonychannel.m3u8', 'Sony Channel', 'https://i.imgur.com/iTdr1wF.png')">
       <img src="https://i.imgur.com/iTdr1wF.png"
            class="w-24 h-24 object-contain mb-2" />
       <span class="text-center text-sm font-medium">Sony Channel</span>
@@ -440,7 +603,7 @@ onclick="setCategory('todos')">Todos</button>
 
     <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
          data-name="cinemax" data-category="filmes"
-         onclick="playChannel('https://aipapai.shop/_temp/cinemax.m3u8')">
+         onclick="playChannel('https://aipapai.shop/_temp/cinemax.m3u8', 'Cinemax', 'https://i.imgur.com/HhhAa5w.png')">
       <img src="https://i.imgur.com/HhhAa5w.png"
            class="w-24 h-24 object-contain mb-2" />
       <span class="text-center text-sm font-medium">Cinemax</span>
@@ -448,7 +611,7 @@ onclick="setCategory('todos')">Todos</button>
 
     <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
          data-name="tnt" data-category="filmes"
-         onclick="playChannel('https://aipapai.shop/_temp/tnt.m3u8')">
+         onclick="playChannel('https://aipapai.shop/_temp/tnt.m3u8', 'TNT', 'https://i.imgur.com/sPWNhrP.png')">
       <img src="https://i.imgur.com/sPWNhrP.png"
            class="w-24 h-24 object-contain mb-2" />
       <span class="text-center text-sm font-medium">TNT</span>
@@ -456,7 +619,7 @@ onclick="setCategory('todos')">Todos</button>
 
     <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
          data-name="studio universal" data-category="filmes"
-         onclick="playChannel('https://aipapai.shop/_temp/studiouniversal.m3u8')">
+         onclick="playChannel('https://aipapai.shop/_temp/studiouniversal.m3u8', 'Studio Universla', 'https://i.imgur.com/Kyfw3dt.png')">
       <img src="https://i.imgur.com/Kyfw3dt.png"
            class="w-24 h-24 object-contain mb-2" />
       <span class="text-center text-sm font-medium">Studio Universal</span>
@@ -464,7 +627,7 @@ onclick="setCategory('todos')">Todos</button>
 
     <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
          data-name="space" data-category="filmes"
-         onclick="playChannel('https://aipapai.shop/_temp/space.m3u8')">
+         onclick="playChannel('https://aipapai.shop/_temp/space.m3u8', 'Space', 'https://i.imgur.com/VAF7uOa.png')">
       <img src="https://i.imgur.com/VAF7uOa.png"
            class="w-24 h-24 object-contain mb-2" />
       <span class="text-center text-sm font-medium">Space</span>
@@ -472,7 +635,7 @@ onclick="setCategory('todos')">Todos</button>
 
     <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
          data-name="warner channel" data-category="filmes"
-         onclick="playChannel('https://aipapai.shop/_temp/warnerchannel.m3u8')">
+         onclick="playChannel('https://aipapai.shop/_temp/warnerchannel.m3u8', 'Warner Channel', 'https://i.imgur.com/Ss5V4vE.png')">
       <img src="https://i.imgur.com/Ss5V4vE.png"
            class="w-24 h-24 object-contain mb-2" />
       <span class="text-center text-sm font-medium">Warner Channel</span>
@@ -480,7 +643,7 @@ onclick="setCategory('todos')">Todos</button>
 
     <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
          data-name="axn" data-category="filmes"
-         onclick="playChannel('https://aipapai.shop/_temp/axn.m3u8')">
+         onclick="playChannel('https://aipapai.shop/_temp/axn.m3u8', 'AXN', 'https://i.imgur.com/1qBp8aM.png')">
       <img src="https://i.imgur.com/1qBp8aM.png"
            class="w-24 h-24 object-contain mb-2" />
       <span class="text-center text-sm font-medium">AXN</span>
@@ -488,7 +651,7 @@ onclick="setCategory('todos')">Todos</button>
 
     <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
          data-name="ae" data-category="filmes"
-         onclick="playChannel('https://aipapai.shop/_temp/ae.m3u8')">
+         onclick="playChannel('https://aipapai.shop/_temp/ae.m3u8', 'A&E', 'https://i.imgur.com/0NrjIP4.png')">
       <img src="https://i.imgur.com/0NrjIP4.png"
            class="w-24 h-24 object-contain mb-2" />
       <span class="text-center text-sm font-medium">A&E</span>
@@ -496,7 +659,7 @@ onclick="setCategory('todos')">Todos</button>
 
     <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
          data-name="cartoonito" data-category="desenhos"
-         onclick="playChannel('https://aipapai.shop/_temp/cartoonito.m3u8')">
+         onclick="playChannel('https://aipapai.shop/_temp/cartoonito.m3u8', 'Cartoonito', 'https://i.imgur.com/vs9ygKR.png')">
       <img src="https://i.imgur.com/vs9ygKR.png"
            class="w-24 h-24 object-contain mb-2" />
       <span class="text-center text-sm font-medium">Cartoonito</span>
@@ -504,7 +667,7 @@ onclick="setCategory('todos')">Todos</button>
 
     <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
          data-name="cartoon network" data-category="desenhos"
-         onclick="playChannel('https://aipapai.shop/_temp/cartoonnetwork.m3u8')">
+         onclick="playChannel('https://aipapai.shop/_temp/cartoonnetwork.m3u8', 'Cartoon Network', 'https://i.imgur.com/b9okZ2E.png')">
       <img src="https://i.imgur.com/b9okZ2E.png"
            class="w-24 h-24 object-contain mb-2" />
       <span class="text-center text-sm font-medium">Cartoon Network</span>
@@ -512,7 +675,8 @@ onclick="setCategory('todos')">Todos</button>
 
     <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
          data-name="discovery kids" data-category="desenhos"
-         onclick="playChannel('https://aipapai.shop/_temp/discoverykids.m3u8')">
+         onclick="playChannel('https://aipapai.shop/_temp/discoverykids.m3u8', 'Discovery Kids', 'https://i.imgur.com/2zbN1or.png')">
+
       <img src="https://i.imgur.com/2zbN1or.png"
            class="w-24 h-24 object-contain mb-2" />
       <span class="text-center text-sm font-medium">Discovery Kids</span>
@@ -520,7 +684,7 @@ onclick="setCategory('todos')">Todos</button>
 
     <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
          data-name="gloob" data-category="desenhos"
-         onclick="playChannel('https://aipapai.shop/_temp/gloob.m3u8')">
+         onclick="playChannel('https://aipapai.shop/_temp/gloob.m3u8', 'Gloob', 'https://i.imgur.com/EwOSxgN.png')">
       <img src="https://i.imgur.com/EwOSxgN.png"
            class="w-24 h-24 object-contain mb-2" />
       <span class="text-center text-sm font-medium">Gloob</span>
@@ -528,7 +692,7 @@ onclick="setCategory('todos')">Todos</button>
 
     <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
          data-name="animal planet" data-category="documentarios"
-         onclick="playChannel('https://aipapai.shop/_temp/animalplanet.m3u8')">
+         onclick="playChannel('https://aipapai.shop/_temp/animalplanet.m3u8', 'Animal Planet', 'https://i.imgur.com/C9YiweQ.png')">
       <img src="https://i.imgur.com/C9YiweQ.png"
            class="w-24 h-24 object-contain mb-2" />
       <span class="text-center text-sm font-medium">Animal Planet</span>
@@ -536,103 +700,129 @@ onclick="setCategory('todos')">Todos</button>
 
     <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
          data-name="history" data-category="documentarios"
-         onclick="playChannel('https://aipapai.shop/_temp/history.m3u8')">
+         onclick="playChannel('https://aipapai.shop/_temp/history.m3u8', 'History', 'https://i.imgur.com/3y9xPav.png')">
       <img src="https://i.imgur.com/3y9xPav.png"
            class="w-24 h-24 object-contain mb-2" />
       <span class="text-center text-sm font-medium">History</span>
     </div>
   </main>
 
-    <!-- Player em tela cheia -->
-    <div id="playerOverlay" class="fixed inset-0 bg-black z-50 flex items-center justify-center hidden">
-      <video id="videoPlayer" controls autoplay class="w-full h-full object-contain bg-black"></video>
-      <button onclick="closePlayer()"
-              class="absolute top-4 right-4 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded shadow">
-        ✖
-      </button>
-    </div>
+       <!-- Player em tela cheia -->
+       <div id="playerOverlay" class="fixed inset-0 bg-black z-50 flex items-center justify-center hidden">
+         <video-js id="videoPlayer" class="video-js vjs-big-play-centered vjs-theme-urban w-full h-full" controls autoplay playsinline></video-js>
 
-    <!-- Script -->
-    <script>
-      let currentCategory = 'todos';
-      let hls = null;
+         <!-- Barra superior com ícone, nome e fechar -->
+         <div id="playerHeader">
+           <img id="channelIcon" src="" alt="Ícone do canal" />
+           <div class="channel-name" id="channelName"></div>
+           <button class="close-btn" onclick="closePlayer()">✖</button>
+         </div>
+       </div>
 
-      function playChannel(url) {
-        const player = document.getElementById('videoPlayer');
-        const overlay = document.getElementById('playerOverlay');
-        const clickSound = document.getElementById('clickSound');
+       <!-- Script -->
+       <script>
+         let currentCategory = 'todos';
+         let hls = null;
+         let player = null;
 
-        // Som de clique
-        clickSound.currentTime = 0;
-        clickSound.play();
+         // Elementos da barra do canal
+         const playerOverlay = document.getElementById('playerOverlay');
+         const playerHeader = document.getElementById('playerHeader');
+         const channelNameEl = document.getElementById('channelName');
+         const channelIconEl = document.getElementById('channelIcon');
 
-        // Mostra o player com fade
-        overlay.classList.remove('hidden');
-        setTimeout(() => overlay.classList.add('active'), 10);
+         function playChannel(url, name, icon) {
+           const overlay = playerOverlay;
+           const clickSound = document.getElementById('clickSound');
 
-        // Reinicia HLS se necessário
-        if (hls) {
-          hls.destroy();
-          hls = null;
-        }
+           clickSound.currentTime = 0;
+           clickSound.play();
 
-        if (Hls.isSupported()) {
-          hls = new Hls();
-          hls.loadSource(url);
-          hls.attachMedia(player);
-          hls.on(Hls.Events.MANIFEST_PARSED, () => player.play());
-        } else if (player.canPlayType('application/vnd.apple.mpegurl')) {
-          player.src = url;
-          player.play();
-        } else {
-          alert("Seu navegador não suporta reprodução de vídeo ao vivo.");
-        }
+           // Atualiza barra do canal
+           channelNameEl.textContent = name;
+           channelIconEl.src = icon;
 
-        // Tela cheia
-        if (overlay.requestFullscreen) overlay.requestFullscreen();
-        else if (overlay.webkitRequestFullscreen) overlay.webkitRequestFullscreen();
-        else if (overlay.msRequestFullscreen) overlay.msRequestFullscreen();
-      }
+           overlay.classList.remove('hidden');
+           setTimeout(() => overlay.classList.add('active'), 10);
 
-      function closePlayer() {
-        const overlay = document.getElementById('playerOverlay');
-        const player = document.getElementById('videoPlayer');
+           if (!player) {
+             player = videojs('videoPlayer', {
+               techOrder: ['html5'],
+               controlBar: {
+                 pictureInPictureToggle: false
+               }
+             });
 
-        overlay.classList.remove('active');
-        setTimeout(() => overlay.classList.add('hidden'), 300);
+             // Quando os controles aparecem ou desaparecem, sincroniza a barra do canal
+             player.on('useractive', () => {
+               playerHeader.classList.remove('hide');
+             });
+             player.on('userinactive', () => {
+               playerHeader.classList.add('hide');
+             });
+           }
 
-        player.pause();
-        player.src = '';
-        if (hls) {
-          hls.destroy();
-          hls = null;
-        }
+           if (hls) {
+             hls.destroy();
+             hls = null;
+           }
 
-        if (document.fullscreenElement) document.exitFullscreen();
-      }
+           if (Hls.isSupported()) {
+             hls = new Hls();
+             hls.loadSource(url);
+             hls.attachMedia(player.tech().el_);
+             hls.on(Hls.Events.MANIFEST_PARSED, () => player.play());
+           } else {
+             player.src({ src: url, type: 'application/x-mpegURL' });
+             player.play();
+           }
 
-      function filterChannels() {
-        const search = document.getElementById('searchInput').value.toLowerCase();
-        document.querySelectorAll('.channel').forEach(el => {
-          const name = el.getAttribute('data-name');
-          const cat = el.getAttribute('data-category');
-          const matchSearch = name.includes(search);
-          const matchCat = currentCategory === 'todos' || currentCategory === cat;
-          el.style.display = matchSearch && matchCat ? 'flex' : 'none';
-        });
-      }
+           if (overlay.requestFullscreen) overlay.requestFullscreen();
+           else if (overlay.webkitRequestFullscreen) overlay.webkitRequestFullscreen();
+           else if (overlay.msRequestFullscreen) overlay.msRequestFullscreen();
+         }
 
-      function setCategory(cat) {
-        currentCategory = cat;
-        document.querySelectorAll('.category-btn').forEach(btn => {
-          btn.classList.remove('bg-blue-600');
-          btn.classList.add('bg-gray-700');
-        });
-        event.target.classList.remove('bg-gray-700');
-        event.target.classList.add('bg-blue-600');
-        filterChannels();
-      }
-    </script>
+         function closePlayer() {
+           const overlay = playerOverlay;
 
-  </body>
-  </html>
+           overlay.classList.remove('active');
+           setTimeout(() => overlay.classList.add('hidden'), 300);
+
+           if (player) {
+             player.pause();
+             player.src('');
+           }
+
+           if (hls) {
+             hls.destroy();
+             hls = null;
+           }
+
+           if (document.fullscreenElement) document.exitFullscreen();
+         }
+
+         function filterChannels() {
+           const search = document.getElementById('searchInput').value.toLowerCase();
+           document.querySelectorAll('.channel').forEach(el => {
+             const name = el.getAttribute('data-name');
+             const cat = el.getAttribute('data-category');
+             const matchSearch = name.includes(search);
+             const matchCat = currentCategory === 'todos' || currentCategory === cat;
+             el.style.display = matchSearch && matchCat ? 'flex' : 'none';
+           });
+         }
+
+         function setCategory(cat) {
+           currentCategory = cat;
+           document.querySelectorAll('.category-btn').forEach(btn => {
+             btn.classList.remove('bg-blue-600');
+             btn.classList.add('bg-gray-700');
+           });
+           event.target.classList.remove('bg-gray-700');
+           event.target.classList.add('bg-blue-600');
+           filterChannels();
+         }
+       </script>
+
+     </body>
+     </html>
