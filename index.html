@@ -83,9 +83,12 @@
     <button class="category-btn bg-blue-600 px-4 py-1 rounded-full text-center" 
 onclick="setCategory('todos')">Todos</button>
     <button class="category-btn bg-gray-700 px-4 py-1 rounded-full text-center" onclick="setCategory('globos')">Globos</button>
+    <button class="category-btn bg-gray-700 px-4 py-1 rounded-full text-center" onclick="setCategory('abertos')">Abertos</button>
     <button class="category-btn bg-gray-700 px-4 py-1 rounded-full text-center" onclick="setCategory('noticias')">Notícias</button>
     <button class="category-btn bg-gray-700 px-4 py-1 rounded-full text-center" onclick="setCategory('esportes')">Esportes</button>
     <button class="category-btn bg-gray-700 px-4 py-1 rounded-full text-center" onclick="setCategory('filmes')">Filmes</button>
+    <button class="category-btn bg-gray-700 px-4 py-1 rounded-full text-center" onclick="setCategory('desenhos')">Desenhos</button>
+    <button class="category-btn bg-gray-700 px-4 py-1 rounded-full text-center" onclick="setCategory('documentarios')">Documentarios</button>
   </nav>
 
   <!-- Lista de Canais -->
@@ -105,6 +108,70 @@ onclick="setCategory('todos')">Todos</button>
       <img src="https://i.imgur.com/aYKmlmc.png"
            class="w-24 h-24 object-contain mb-2" />
       <span class="text-center text-sm font-medium">Globo RJ</span>
+    </div>
+
+    <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
+         data-name="cultura" data-category="abertos"
+         onclick="playChannel('https://aipapai.shop/_temp/cultura.m3u8')">
+      <img src="https://i.imgur.com/PJLJzdW.png"
+           class="w-24 h-24 object-contain mb-2" />
+      <span class="text-center text-sm font-medium">TV Cultura</span>
+    </div>
+
+    <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
+         data-name="record" data-category="abertos"
+         onclick="playChannel('https://aipapai.shop/_temp/record.m3u8')">
+      <img src="https://i.imgur.com/SehYFaG.png"
+           class="w-24 h-24 object-contain mb-2" />
+      <span class="text-center text-sm font-medium">Record</span>
+    </div>
+
+    <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
+         data-name="redetv" data-category="abertos"
+         onclick="playChannel('https://aipapai.shop/_temp/redetv.m3u8')">
+      <img src="https://i.imgur.com/uKSf0kb.png"
+           class="w-24 h-24 object-contain mb-2" />
+      <span class="text-center text-sm font-medium">RedeTV!</span>
+    </div>
+
+    <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
+         data-name="sbt" data-category="abertos"
+         onclick="playChannel('https://aipapai.shop/_temp/sbt.m3u8')">
+      <img src="https://i.imgur.com/Orcyltp.png"
+           class="w-24 h-24 object-contain mb-2" />
+      <span class="text-center text-sm font-medium">SBT</span>
+    </div>
+
+    <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
+         data-name="band" data-category="abertos"
+         onclick="playChannel('https://aipapai.shop/_temp/band.m3u8')">
+      <img src="https://i.imgur.com/QZgrKOf.png"
+           class="w-24 h-24 object-contain mb-2" />
+      <span class="text-center text-sm font-medium">Band</span>
+    </div>
+
+    <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
+         data-name="globo news" data-category="noticias"
+         onclick="playChannel('https://aipapai.shop/_temp/globonews.m3u8')">
+      <img src="https://i.imgur.com/CCEg0km.png"
+           class="w-24 h-24 object-contain mb-2" />
+      <span class="text-center text-sm font-medium">Globo News</span>
+    </div>
+
+    <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
+         data-name="band news" data-category="noticias"
+         onclick="playChannel('https://aipapai.shop/_temp/bandnews.m3u8')">
+      <img src="https://i.imgur.com/uzNyEV4.png"
+           class="w-24 h-24 object-contain mb-2" />
+      <span class="text-center text-sm font-medium">Band News</span>
+    </div>
+
+    <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
+         data-name="record news" data-category="noticias"
+         onclick="playChannel('https://aipapai.shop/_temp/recordnews.m3u8')">
+      <img src="https://i.imgur.com/OlccJ9t.png"
+           class="w-24 h-24 object-contain mb-2" />
+      <span class="text-center text-sm font-medium">Record News</span>
     </div>
 
     <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
@@ -141,14 +208,110 @@ onclick="setCategory('todos')">Todos</button>
 
     <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
          data-name="espn2" data-category="esportes"
-         onclick="playChannel('https://aipapai.shop/_temp/espn.m3u8')">
+         onclick="playChannel('https://aipapai.shop/_temp/espn2.m3u8')">
       <img src="https://i.imgur.com/s2YAxM9.png"
            class="w-24 h-24 object-contain mb-2" />
       <span class="text-center text-sm font-medium">Espn 2</span>
     </div>
 
     <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
-         data-name="TelecinePremium" data-category="filmes"
+         data-name="espn3" data-category="esportes"
+         onclick="playChannel('https://aipapai.shop/_temp/espn3.m3u8')">
+      <img src="https://i.imgur.com/zctUday.png"
+           class="w-24 h-24 object-contain mb-2" />
+      <span class="text-center text-sm font-medium">Espn 3</span>
+    </div>
+
+    <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
+         data-name="espn4" data-category="esportes"
+         onclick="playChannel('https://aipapai.shop/_temp/espn4.m3u8')">
+      <img src="https://i.imgur.com/k3iSdJx.png"
+           class="w-24 h-24 object-contain mb-2" />
+      <span class="text-center text-sm font-medium">Espn 4</span>
+    </div>
+
+    <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
+         data-name="espn5" data-category="esportes"
+         onclick="playChannel('https://aipapai.shop/_temp/espn5.m3u8')">
+      <img src="https://i.imgur.com/7YScj1R.png"
+           class="w-24 h-24 object-contain mb-2" />
+      <span class="text-center text-sm font-medium">Espn 5</span>
+    </div>
+
+    <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
+         data-name="espn6" data-category="esportes"
+         onclick="playChannel('https://aipapai.shop/_temp/espn6.m3u8')">
+      <img src="https://i.imgur.com/dtWJKS6.png"
+           class="w-24 h-24 object-contain mb-2" />
+      <span class="text-center text-sm font-medium">Espn 6</span>
+    </div>
+
+    <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
+         data-name="premiere" data-category="esportes"
+         onclick="playChannel('https://aipapai.shop/_temp/premiere.m3u8')">
+      <img src="https://i.imgur.com/ydDYQhX.png"
+           class="w-24 h-24 object-contain mb-2" />
+      <span class="text-center text-sm font-medium">Premiere</span>
+    </div>
+
+    <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
+         data-name="premiere2" data-category="esportes"
+         onclick="playChannel('https://aipapai.shop/_temp/premiere2.m3u8')">
+      <img src="https://i.imgur.com/ydDYQhX.png"
+           class="w-24 h-24 object-contain mb-2" />
+      <span class="text-center text-sm font-medium">Premiere 2</span>
+    </div>
+
+    <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
+         data-name="premiere3" data-category="esportes"
+         onclick="playChannel('https://aipapai.shop/_temp/premiere3.m3u8')">
+      <img src="https://i.imgur.com/ydDYQhX.png"
+           class="w-24 h-24 object-contain mb-2" />
+      <span class="text-center text-sm font-medium">Premiere 3</span>
+    </div>
+
+    <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
+         data-name="premiere4" data-category="esportes"
+         onclick="playChannel('https://aipapai.shop/_temp/premiere4.m3u8')">
+      <img src="https://i.imgur.com/ydDYQhX.png"
+           class="w-24 h-24 object-contain mb-2" />
+      <span class="text-center text-sm font-medium">Premiere 4</span>
+    </div>
+
+    <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
+         data-name="premiere5" data-category="esportes"
+         onclick="playChannel('https://aipapai.shop/_temp/premiere5.m3u8')">
+      <img src="https://i.imgur.com/ydDYQhX.png"
+           class="w-24 h-24 object-contain mb-2" />
+      <span class="text-center text-sm font-medium">Premiere 5</span>
+    </div>
+
+    <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
+         data-name="premiere6" data-category="esportes"
+         onclick="playChannel('https://aipapai.shop/_temp/premiere6.m3u8')">
+      <img src="https://i.imgur.com/ydDYQhX.png"
+           class="w-24 h-24 object-contain mb-2" />
+      <span class="text-center text-sm font-medium">Premiere 6</span>
+    </div>
+
+    <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
+         data-name="premiere7" data-category="esportes"
+         onclick="playChannel('https://aipapai.shop/_temp/premiere7.m3u8')">
+      <img src="https://i.imgur.com/ydDYQhX.png"
+           class="w-24 h-24 object-contain mb-2" />
+      <span class="text-center text-sm font-medium">Premiere 7</span>
+    </div>
+
+    <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
+         data-name="premiere8" data-category="esportes"
+         onclick="playChannel('https://aipapai.shop/_temp/premiere8.m3u8')">
+      <img src="https://i.imgur.com/ydDYQhX.png"
+           class="w-24 h-24 object-contain mb-2" />
+      <span class="text-center text-sm font-medium">Premiere 8</span>
+    </div>
+
+    <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
+         data-name="telecine premium" data-category="filmes"
          onclick="playChannel('https://aipapai.shop/_temp/telecinepremium.m3u8')">
       <img src="https://i.imgur.com/cV566mo.png"
            class="w-24 h-24 object-contain mb-2" />
@@ -156,7 +319,7 @@ onclick="setCategory('todos')">Todos</button>
     </div>
 
     <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
-         data-name="TelecineAction" data-category="filmes"
+         data-name="telecine action" data-category="filmes"
          onclick="playChannel('https://aipapai.shop/_temp/telecineaction.m3u8')">
       <img src="https://i.imgur.com/qmnXGnZ.png"
            class="w-24 h-24 object-contain mb-2" />
@@ -164,7 +327,7 @@ onclick="setCategory('todos')">Todos</button>
     </div>
 
     <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
-         data-name="TelecineTouch" data-category="filmes"
+         data-name="Telecine touch" data-category="filmes"
          onclick="playChannel('https://aipapai.shop/_temp/telecinetouch.m3u8')">
       <img src="https://i.imgur.com/451znaq.png"
            class="w-24 h-24 object-contain mb-2" />
@@ -172,7 +335,7 @@ onclick="setCategory('todos')">Todos</button>
     </div>
     
     <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
-         data-name="TelecinePipoca" data-category="filmes"
+         data-name="telecine pipoca" data-category="filmes"
          onclick="playChannel('https://aipapai.shop/_temp/telecinepipoca.m3u8')">
       <img src="https://i.imgur.com/WCiEiEi.png"
            class="w-24 h-24 object-contain mb-2" />
@@ -180,7 +343,7 @@ onclick="setCategory('todos')">Todos</button>
     </div>
 
     <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
-         data-name="TelecineFun" data-category="filmes"
+         data-name="telecine fun" data-category="filmes"
          onclick="playChannel('https://aipapai.shop/_temp/telecinefun.m3u8')">
       <img src="https://i.imgur.com/2jU1LhG.png"
            class="w-24 h-24 object-contain mb-2" />
@@ -188,7 +351,7 @@ onclick="setCategory('todos')">Todos</button>
     </div>
 
     <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
-         data-name="TelecineCult" data-category="filmes"
+         data-name="telecine cult" data-category="filmes"
          onclick="playChannel('https://aipapai.shop/_temp/telecinecult.m3u8')">
       <img src="https://i.imgur.com/smmPlAJ.png"
            class="w-24 h-24 object-contain mb-2" />
@@ -196,7 +359,7 @@ onclick="setCategory('todos')">Todos</button>
     </div>
 
     <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
-         data-name="Megapix" data-category="filmes"
+         data-name="megapix" data-category="filmes"
          onclick="playChannel('https://aipapai.shop/_temp/megapix.m3u8')">
       <img src="https://i.imgur.com/5myVSRr.png"
            class="w-24 h-24 object-contain mb-2" />
@@ -204,7 +367,7 @@ onclick="setCategory('todos')">Todos</button>
     </div>
 
     <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
-         data-name="HBO" data-category="filmes"
+         data-name="hbo" data-category="filmes"
          onclick="playChannel('https://aipapai.shop/_temp/hbo.m3u8')">
       <img src="https://i.imgur.com/IGXN8IE.png"
            class="w-24 h-24 object-contain mb-2" />
@@ -212,7 +375,7 @@ onclick="setCategory('todos')">Todos</button>
     </div>
 
     <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
-         data-name="HBO2" data-category="filmes"
+         data-name="hbo2" data-category="filmes"
          onclick="playChannel('https://aipapai.shop/_temp/hbo2.m3u8')">
       <img src="https://i.imgur.com/To2YHqn.png"
            class="w-24 h-24 object-contain mb-2" />
@@ -220,31 +383,31 @@ onclick="setCategory('todos')">Todos</button>
     </div>
 
     <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
-         data-name="HBOplus" data-category="filmes"
+         data-name="hbo plus" data-category="filmes"
          onclick="playChannel('https://aipapai.shop/_temp/hboplus.m3u8')">
-      <img src="https://i.imgur.com/ife0hlp.png"
+      <img src="https://i.imgur.com/GyzT999.png"
            class="w-24 h-24 object-contain mb-2" />
       <span class="text-center text-sm font-medium">HBO Plus</span>
     </div>
 
     <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
-         data-name="HBOsignature" data-category="filmes"
+         data-name="hbo signature" data-category="filmes"
          onclick="playChannel('https://aipapai.shop/_temp/hbosignature.m3u8')">
-      <img src="https://i.imgur.com/5myVSRr.png"
+      <img src="https://i.imgur.com/NbxNXKv.png"
            class="w-24 h-24 object-contain mb-2" />
       <span class="text-center text-sm font-medium">HBO Signature</span>
     </div>
 
     <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
-         data-name="HBOfamily" data-category="filmes"
+         data-name="hbo family" data-category="filmes"
          onclick="playChannel('https://aipapai.shop/_temp/hbofamily.m3u8')">
-      <img src="https://i.imgur.com/umXqMMv.png"
+      <img src="https://i.imgur.com/bQLjCq0.png"
            class="w-24 h-24 object-contain mb-2" />
       <span class="text-center text-sm font-medium">HBO Family</span>
     </div>
 
     <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
-         data-name="HBOmundi" data-category="filmes"
+         data-name="hbo mundi" data-category="filmes"
          onclick="playChannel('https://aipapai.shop/_temp/hbomundi.m3u8')">
       <img src="https://i.imgur.com/uGWWNK3.png"
            class="w-24 h-24 object-contain mb-2" />
@@ -252,7 +415,7 @@ onclick="setCategory('todos')">Todos</button>
     </div>
 
     <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
-         data-name="HBOxtreme" data-category="filmes"
+         data-name="hbo xtreme" data-category="filmes"
          onclick="playChannel('https://aipapai.shop/_temp/hboxtreme.m3u8')">
       <img src="https://i.imgur.com/M5Z7VPy.png"
            class="w-24 h-24 object-contain mb-2" />
@@ -260,11 +423,123 @@ onclick="setCategory('todos')">Todos</button>
     </div>
 
     <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
-         data-name="HBOpop" data-category="filmes"
+         data-name="hbo pop" data-category="filmes"
          onclick="playChannel('https://aipapai.shop/_temp/hbopop.m3u8')">
       <img src="https://i.imgur.com/ThoE1JB.png"
            class="w-24 h-24 object-contain mb-2" />
       <span class="text-center text-sm font-medium">HBO Pop</span>
+    </div>
+
+    <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
+         data-name="sony channel" data-category="filmes"
+         onclick="playChannel('https://aipapai.shop/_temp/sonychannel.m3u8')">
+      <img src="https://i.imgur.com/iTdr1wF.png"
+           class="w-24 h-24 object-contain mb-2" />
+      <span class="text-center text-sm font-medium">Sony Channel</span>
+    </div>
+
+    <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
+         data-name="cinemax" data-category="filmes"
+         onclick="playChannel('https://aipapai.shop/_temp/cinemax.m3u8')">
+      <img src="https://i.imgur.com/HhhAa5w.png"
+           class="w-24 h-24 object-contain mb-2" />
+      <span class="text-center text-sm font-medium">Cinemax</span>
+    </div>
+
+    <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
+         data-name="tnt" data-category="filmes"
+         onclick="playChannel('https://aipapai.shop/_temp/tnt.m3u8')">
+      <img src="https://i.imgur.com/sPWNhrP.png"
+           class="w-24 h-24 object-contain mb-2" />
+      <span class="text-center text-sm font-medium">TNT</span>
+    </div>
+
+    <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
+         data-name="studio universal" data-category="filmes"
+         onclick="playChannel('https://aipapai.shop/_temp/studiouniversal.m3u8')">
+      <img src="https://i.imgur.com/Kyfw3dt.png"
+           class="w-24 h-24 object-contain mb-2" />
+      <span class="text-center text-sm font-medium">Studio Universal</span>
+    </div>
+
+    <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
+         data-name="space" data-category="filmes"
+         onclick="playChannel('https://aipapai.shop/_temp/space.m3u8')">
+      <img src="https://i.imgur.com/VAF7uOa.png"
+           class="w-24 h-24 object-contain mb-2" />
+      <span class="text-center text-sm font-medium">Space</span>
+    </div>
+
+    <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
+         data-name="warner channel" data-category="filmes"
+         onclick="playChannel('https://aipapai.shop/_temp/warnerchannel.m3u8')">
+      <img src="https://i.imgur.com/Ss5V4vE.png"
+           class="w-24 h-24 object-contain mb-2" />
+      <span class="text-center text-sm font-medium">Warner Channel</span>
+    </div>
+
+    <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
+         data-name="axn" data-category="filmes"
+         onclick="playChannel('https://aipapai.shop/_temp/axn.m3u8')">
+      <img src="https://i.imgur.com/1qBp8aM.png"
+           class="w-24 h-24 object-contain mb-2" />
+      <span class="text-center text-sm font-medium">AXN</span>
+    </div>
+
+    <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
+         data-name="ae" data-category="filmes"
+         onclick="playChannel('https://aipapai.shop/_temp/ae.m3u8')">
+      <img src="https://i.imgur.com/0NrjIP4.png"
+           class="w-24 h-24 object-contain mb-2" />
+      <span class="text-center text-sm font-medium">A&E</span>
+    </div>
+
+    <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
+         data-name="cartoonito" data-category="desenhos"
+         onclick="playChannel('https://aipapai.shop/_temp/cartoonito.m3u8')">
+      <img src="https://i.imgur.com/vs9ygKR.png"
+           class="w-24 h-24 object-contain mb-2" />
+      <span class="text-center text-sm font-medium">Cartoonito</span>
+    </div>
+
+    <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
+         data-name="cartoon network" data-category="desenhos"
+         onclick="playChannel('https://aipapai.shop/_temp/cartoonnetwork.m3u8')">
+      <img src="https://i.imgur.com/b9okZ2E.png"
+           class="w-24 h-24 object-contain mb-2" />
+      <span class="text-center text-sm font-medium">Cartoon Network</span>
+    </div>
+
+    <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
+         data-name="discovery kids" data-category="desenhos"
+         onclick="playChannel('https://aipapai.shop/_temp/discoverykids.m3u8')">
+      <img src="https://i.imgur.com/2zbN1or.png"
+           class="w-24 h-24 object-contain mb-2" />
+      <span class="text-center text-sm font-medium">Discovery Kids</span>
+    </div>
+
+    <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
+         data-name="gloob" data-category="desenhos"
+         onclick="playChannel('https://aipapai.shop/_temp/gloob.m3u8')">
+      <img src="https://i.imgur.com/EwOSxgN.png"
+           class="w-24 h-24 object-contain mb-2" />
+      <span class="text-center text-sm font-medium">Gloob</span>
+    </div>
+
+    <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
+         data-name="animal planet" data-category="documentarios"
+         onclick="playChannel('https://aipapai.shop/_temp/animalplanet.m3u8')">
+      <img src="https://i.imgur.com/C9YiweQ.png"
+           class="w-24 h-24 object-contain mb-2" />
+      <span class="text-center text-sm font-medium">Animal Planet</span>
+    </div>
+
+    <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
+         data-name="history" data-category="documentarios"
+         onclick="playChannel('https://aipapai.shop/_temp/history.m3u8')">
+      <img src="https://i.imgur.com/3y9xPav.png"
+           class="w-24 h-24 object-contain mb-2" />
+      <span class="text-center text-sm font-medium">History</span>
     </div>
   </main>
 
