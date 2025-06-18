@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PrimeCast</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+  <style>
+    html, body {
+      height: 100%;
+      overflow: hidden;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to bottom, #000000, #0a1f3d);
+      color: #ffffff;
+      background-attachment: fixed;
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+
+    :root {
+      --bg-main: linear-gradient(to bottom, #000000, #0a1f3d);
+      --text-main: #ffffff;
+      --bg-card: #1c1c2c;
+      --bg-nav: #111827;
+      --bg-header: ##1d242e;
+      --input-bg: #1f2937;
+    }
+
+    #channelList {
+      height: calc(100vh - 160px);
+      overflow-y: auto;
+    }
+
+    .channel {
+      transition: transform 0.2s ease, opacity 0.3s ease;
+      opacity: 0;
+      transform: scale(0.95);
+      animation: fadeIn 0.5s forwards;
+    }
+
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    #playerOverlay {
+      transition: opacity 0.3s ease;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    #playerOverlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    ::-webkit-scrollbar {
+      width: 0;
+    }
+  </style>
+</head>
+<body class="flex flex-col">
+
+  <!-- Som -->
+  <audio id="clickSound" src="https://assets.mixkit.co/sfx/preview/mixkit-select-click-1109.mp3" preload="auto"></audio>
+
+  <!-- Topo -->
+  <header class="p-4" style="background: var(--bg-header);">
+    <div class="text-center mb-4">
+      <img src="https://i.imgur.com/tpiw9ZL.png" alt="PrimeCast" class="h-24 mx-auto" />
+    </div>
+    <input type="text" id="searchInput" oninput="filterChannels()"
+           style="background: var(--input-bg); color: var(--text-main);"
+           class="px-4 py-2 rounded-lg w-full relative -mt-2 z-10"
+           placeholder="🔍 Buscar canal..." />
+  </header>
+
+  <!-- Categorias -->
+  <nav class="flex gap-2 px-4 py-2 overflow-x-auto justify-center" style="background: var(--bg-nav);">
+    <button class="category-btn bg-blue-600 px-4 py-1 rounded-full text-center" 
+onclick="setCategory('todos')">Todos</button>
+    <button class="category-btn bg-gray-700 px-4 py-1 rounded-full text-center" onclick="setCategory('globos')">Globos</button>
+    <button class="category-btn bg-gray-700 px-4 py-1 rounded-full text-center" onclick="setCategory('noticias')">Notícias</button>
+    <button class="category-btn bg-gray-700 px-4 py-1 rounded-full text-center" onclick="setCategory('esportes')">Esportes</button>
+    <button class="category-btn bg-gray-700 px-4 py-1 rounded-full text-center" onclick="setCategory('filmes')">Filmes</button>
+  </nav>
+
+  <!-- Lista de Canais -->
+  <main id="channelList" class="grid grid-cols-2 gap-4 p-4 overflow-y-auto">
+    <!-- Canal -->
+    <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
+         data-name="globosp" data-category="globos"
+         onclick="playChannel('https://aipapai.shop/_temp/globosp.m3u8')">
+      <img src="https://i.imgur.com/aYKmlmc.png"
+           class="w-24 h-24 object-contain mb-2" />
+      <span class="text-center text-sm font-medium">Globo SP</span>
+    </div>
+
+    <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
+         data-name="globorj" data-category="globos"
+         onclick="playChannel('https://aipapai.shop/_temp/globorj.m3u8')">
+      <img src="https://i.imgur.com/aYKmlmc.png"
+           class="w-24 h-24 object-contain mb-2" />
+      <span class="text-center text-sm font-medium">Globo RJ</span>
+    </div>
+
+    <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
+         data-name="Sportv" data-category="esportes"
+         onclick="playChannel('https://aipapai.shop/_temp/sportv.m3u8')">
+      <img src="https://i.imgur.com/IwO9fQL.png"
+           class="w-24 h-24 object-contain mb-2" />
+      <span class="text-center text-sm font-medium">Sportv</span>
+    </div>
+
+    <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
+         data-name="Sportv 2" data-category="esportes"
+         onclick="playChannel('https://aipapai.shop/_temp/sportv2.m3u8')">
+      <img src="https://i.imgur.com/Aln0pjU.png"
+           class="w-24 h-24 object-contain mb-2" />
+      <span class="text-center text-sm font-medium">Sportv 2</span>
+    </div>
+
+    <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
+         data-name="Sportv3" data-category="esportes"
+         onclick="playChannel('https://aipapai.shop/_temp/sportv3.m3u8')">
+      <img src="https://i.imgur.com/FaVJDPa.png"
+           class="w-24 h-24 object-contain mb-2" />
+      <span class="text-center text-sm font-medium">Sportv 3</span>
+    </div>
+
+    <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
+         data-name="espn" data-category="esportes"
+         onclick="playChannel('https://aipapai.shop/_temp/espn.m3u8')">
+      <img src="https://i.imgur.com/AUdOPW0.png"
+           class="w-24 h-24 object-contain mb-2" />
+      <span class="text-center text-sm font-medium">Espn</span>
+    </div>
+
+    <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
+         data-name="espn2" data-category="esportes"
+         onclick="playChannel('https://aipapai.shop/_temp/espn.m3u8')">
+      <img src="https://i.imgur.com/s2YAxM9.png"
+           class="w-24 h-24 object-contain mb-2" />
+      <span class="text-center text-sm font-medium">Espn 2</span>
+    </div>
+
+    <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
+         data-name="TelecinePremium" data-category="filmes"
+         onclick="playChannel('https://aipapai.shop/_temp/telecinepremium.m3u8')">
+      <img src="https://i.imgur.com/cV566mo.png"
+           class="w-24 h-24 object-contain mb-2" />
+      <span class="text-center text-sm font-medium">Telecine Premium</span>
+    </div>
+
+    <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
+         data-name="TelecineAction" data-category="filmes"
+         onclick="playChannel('https://aipapai.shop/_temp/telecineaction.m3u8')">
+      <img src="https://i.imgur.com/qmnXGnZ.png"
+           class="w-24 h-24 object-contain mb-2" />
+      <span class="text-center text-sm font-medium">Telecine Action</span>
+    </div>
+
+    <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
+         data-name="TelecineTouch" data-category="filmes"
+         onclick="playChannel('https://aipapai.shop/_temp/telecinetouch.m3u8')">
+      <img src="https://i.imgur.com/451znaq.png"
+           class="w-24 h-24 object-contain mb-2" />
+      <span class="text-center text-sm font-medium">Telecine Touch</span>
+    </div>
+    
+    <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
+         data-name="TelecinePipoca" data-category="filmes"
+         onclick="playChannel('https://aipapai.shop/_temp/telecinepipoca.m3u8')">
+      <img src="https://i.imgur.com/WCiEiEi.png"
+           class="w-24 h-24 object-contain mb-2" />
+      <span class="text-center text-sm font-medium">Telecine Pipoca</span>
+    </div>
+
+    <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
+         data-name="TelecineFun" data-category="filmes"
+         onclick="playChannel('https://aipapai.shop/_temp/telecinefun.m3u8')">
+      <img src="https://i.imgur.com/2jU1LhG.png"
+           class="w-24 h-24 object-contain mb-2" />
+      <span class="text-center text-sm font-medium">Telecine Fun</span>
+    </div>
+
+    <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
+         data-name="TelecineCult" data-category="filmes"
+         onclick="playChannel('https://aipapai.shop/_temp/telecinecult.m3u8')">
+      <img src="https://i.imgur.com/smmPlAJ.png"
+           class="w-24 h-24 object-contain mb-2" />
+      <span class="text-center text-sm font-medium">Telecine Cult</span>
+    </div>
+
+    <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
+         data-name="Megapix" data-category="filmes"
+         onclick="playChannel('https://aipapai.shop/_temp/megapix.m3u8')">
+      <img src="https://i.imgur.com/5myVSRr.png"
+           class="w-24 h-24 object-contain mb-2" />
+      <span class="text-center text-sm font-medium">Megapix</span>
+    </div>
+
+    <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
+         data-name="HBO" data-category="filmes"
+         onclick="playChannel('https://aipapai.shop/_temp/hbo.m3u8')">
+      <img src="https://i.imgur.com/IGXN8IE.png"
+           class="w-24 h-24 object-contain mb-2" />
+      <span class="text-center text-sm font-medium">HBO</span>
+    </div>
+
+    <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
+         data-name="HBO2" data-category="filmes"
+         onclick="playChannel('https://aipapai.shop/_temp/hbo2.m3u8')">
+      <img src="https://i.imgur.com/To2YHqn.png"
+           class="w-24 h-24 object-contain mb-2" />
+      <span class="text-center text-sm font-medium">HBO2</span>
+    </div>
+
+    <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
+         data-name="HBOplus" data-category="filmes"
+         onclick="playChannel('https://aipapai.shop/_temp/hboplus.m3u8')">
+      <img src="https://i.imgur.com/ife0hlp.png"
+           class="w-24 h-24 object-contain mb-2" />
+      <span class="text-center text-sm font-medium">HBO Plus</span>
+    </div>
+
+    <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
+         data-name="HBOsignature" data-category="filmes"
+         onclick="playChannel('https://aipapai.shop/_temp/hbosignature.m3u8')">
+      <img src="https://i.imgur.com/5myVSRr.png"
+           class="w-24 h-24 object-contain mb-2" />
+      <span class="text-center text-sm font-medium">HBO Signature</span>
+    </div>
+
+    <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
+         data-name="HBOfamily" data-category="filmes"
+         onclick="playChannel('https://aipapai.shop/_temp/hbofamily.m3u8')">
+      <img src="https://i.imgur.com/umXqMMv.png"
+           class="w-24 h-24 object-contain mb-2" />
+      <span class="text-center text-sm font-medium">HBO Family</span>
+    </div>
+
+    <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
+         data-name="HBOmundi" data-category="filmes"
+         onclick="playChannel('https://aipapai.shop/_temp/hbomundi.m3u8')">
+      <img src="https://i.imgur.com/uGWWNK3.png"
+           class="w-24 h-24 object-contain mb-2" />
+      <span class="text-center text-sm font-medium">HBO Mundi</span>
+    </div>
+
+    <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
+         data-name="HBOxtreme" data-category="filmes"
+         onclick="playChannel('https://aipapai.shop/_temp/hboxtreme.m3u8')">
+      <img src="https://i.imgur.com/M5Z7VPy.png"
+           class="w-24 h-24 object-contain mb-2" />
+      <span class="text-center text-sm font-medium">HBO Xtreme</span>
+    </div>
+
+    <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
+         data-name="HBOpop" data-category="filmes"
+         onclick="playChannel('https://aipapai.shop/_temp/hbopop.m3u8')">
+      <img src="https://i.imgur.com/ThoE1JB.png"
+           class="w-24 h-24 object-contain mb-2" />
+      <span class="text-center text-sm font-medium">HBO Pop</span>
+    </div>
+  </main>
+
+    <!-- Player em tela cheia -->
+    <div id="playerOverlay" class="fixed inset-0 bg-black z-50 flex items-center justify-center hidden">
+      <video id="videoPlayer" controls autoplay class="w-full h-full object-contain bg-black"></video>
+      <button onclick="closePlayer()"
+              class="absolute top-4 right-4 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded shadow">
+        ✖
+      </button>
+    </div>
+
+    <!-- Script -->
+    <script>
+      let currentCategory = 'todos';
+      let hls = null;
+
+      function playChannel(url) {
+        const player = document.getElementById('videoPlayer');
+        const overlay = document.getElementById('playerOverlay');
+        const clickSound = document.getElementById('clickSound');
+
+        // Som de clique
+        clickSound.currentTime = 0;
+        clickSound.play();
+
+        // Mostra o player com fade
+        overlay.classList.remove('hidden');
+        setTimeout(() => overlay.classList.add('active'), 10);
+
+        // Reinicia HLS se necessário
+        if (hls) {
+          hls.destroy();
+          hls = null;
+        }
+
+        if (Hls.isSupported()) {
+          hls = new Hls();
+          hls.loadSource(url);
+          hls.attachMedia(player);
+          hls.on(Hls.Events.MANIFEST_PARSED, () => player.play());
+        } else if (player.canPlayType('application/vnd.apple.mpegurl')) {
+          player.src = url;
+          player.play();
+        } else {
+          alert("Seu navegador não suporta reprodução de vídeo ao vivo.");
+        }
+
+        // Tela cheia
+        if (overlay.requestFullscreen) overlay.requestFullscreen();
+        else if (overlay.webkitRequestFullscreen) overlay.webkitRequestFullscreen();
+        else if (overlay.msRequestFullscreen) overlay.msRequestFullscreen();
+      }
+
+      function closePlayer() {
+        const overlay = document.getElementById('playerOverlay');
+        const player = document.getElementById('videoPlayer');
+
+        overlay.classList.remove('active');
+        setTimeout(() => overlay.classList.add('hidden'), 300);
+
+        player.pause();
+        player.src = '';
+        if (hls) {
+          hls.destroy();
+          hls = null;
+        }
+
+        if (document.fullscreenElement) document.exitFullscreen();
+      }
+
+      function filterChannels() {
+        const search = document.getElementById('searchInput').value.toLowerCase();
+        document.querySelectorAll('.channel').forEach(el => {
+          const name = el.getAttribute('data-name');
+          const cat = el.getAttribute('data-category');
+          const matchSearch = name.includes(search);
+          const matchCat = currentCategory === 'todos' || currentCategory === cat;
+          el.style.display = matchSearch && matchCat ? 'flex' : 'none';
+        });
+      }
+
+      function setCategory(cat) {
+        currentCategory = cat;
+        document.querySelectorAll('.category-btn').forEach(btn => {
+          btn.classList.remove('bg-blue-600');
+          btn.classList.add('bg-gray-700');
+        });
+        event.target.classList.remove('bg-gray-700');
+        event.target.classList.add('bg-blue-600');
+        filterChannels();
+      }
+    </script>
+
+  </body>
+  </html>
