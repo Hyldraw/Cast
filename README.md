@@ -1,4 +1,5 @@
-# 📺 PrimeCast
+## 📺 PrimeCast
+![PrimeCast](https://github.com/user-attachments/assets/13af3d26-ef25-419b-bb44-d67e9b28810a)
 
 **PrimeCast** é um aplicativo moderno para assistir **centenas de canais de TV ao vivo**, com foco em qualidade, variedade e estabilidade. De filmes a esportes, passando por canais abertos, infantis e documentários, o PrimeCast transforma seu dispositivo em uma verdadeira central de entretenimento.
 
@@ -29,4 +30,4 @@ O PrimeCast está em desenvolvimento contínuo. Em breve será possível baixar 
 
 ## 📃 Licença
 
-MIT License © 2025 [Hyldraw](https://github.com/Hyldraw)
+© 2025 [Hyldraw](https://github.com/Hyldraw). Todos os direitos reservados.
