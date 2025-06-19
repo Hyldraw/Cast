@@ -255,12 +255,37 @@
     #playerHeader button.close-btn:hover {
       color: #ff5555;
     }
+
+    /* Estilo do pop-up de notificação */
+    #notification {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: rgba(0, 0, 0, 0.9);
+      color: white;
+      padding: 16px 24px;
+      border-radius: 8px;
+      z-index: 1000;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      max-width: 90%;
+      text-align: center;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    }
+
+    #notification.show {
+      opacity: 1;
+    }
   </style>
 </head>
 <body class="flex flex-col">
 
   <!-- Som -->
   <audio id="clickSound" src="https://assets.mixkit.co/sfx/preview/mixkit-select-click-1109.mp3" preload="auto"></audio>
+
+  <!-- Pop-up de notificação -->
+  <div id="notification" class="hidden"></div>
 
   <!-- Topo -->
   <header class="p-4">
@@ -275,6 +300,7 @@
   <!-- Categorias -->
   <nav class="flex gap-3 px-4 py-3 overflow-x-auto bg-gray-900" style="scrollbar-width: thin; scrollbar-color: #374151 #1f2937;">
     <button class="category-btn bg-blue-700 px-4 py-2 rounded-full text-center whitespace-nowrap flex-shrink-0" onclick="setCategory('todos')">Todos</button>
+    <button class="category-btn bg-gray-700 px-4 py-2 rounded-full text-center whitespace-nowrap flex-shrink-0" onclick="setCategory('jogos')">🔴 Futebol</button>
     <button class="category-btn bg-gray-700 px-4 py-2 rounded-full text-center whitespace-nowrap flex-shrink-0" onclick="setCategory('globos')">Globos</button>
     <button class="category-btn bg-gray-700 px-4 py-2 rounded-full text-center whitespace-nowrap flex-shrink-0" onclick="setCategory('abertos')">Abertos</button>
     <button class="category-btn bg-gray-700 px-4 py-2 rounded-full text-center whitespace-nowrap flex-shrink-0" onclick="setCategory('noticias')">Notícias</button>
@@ -286,10 +312,43 @@
 
   <!-- Lista de Canais -->
   <main id="channelList" class="grid grid-cols-2 gap-4 p-4 overflow-y-auto">
-    <!-- Canal -->
+    <!-- Canais Temporários -->
+    <div id="Fut1" class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
+         data-name="palmeiras x al ahly" data-category="jogos"
+         onclick="playChannel('https://aipapai.shop/_temp/globosp.m3u8', 'Palmeiras x Al Ahly', 'https://i.imgur.com/rwdlg0I.png')">
+      <img src="https://i.imgur.com/rwdlg0I.png"
+           class="w-24 h-24 object-contain mb-2" />
+      <span class="text-center text-sm font-medium">Palmeiras x Al Ahly</span>
+    </div>
+
+    <div id="Fut2" class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
+         data-name="inter miami x porto" data-category="jogos"
+         onclick="playChannel('https://aipapai.shop/_temp/globosp.m3u8', 'Inter Miami x Porto', 'https://i.imgur.com/rwdlg0I.png')">
+      <img src="https://i.imgur.com/rwdlg0I.png"
+           class="w-24 h-24 object-contain mb-2" />
+      <span class="text-center text-sm font-medium">Inter Miami x Porto</span>
+    </div>
+
+    <div id="Fut3" class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
+         data-name="seattle sounders x atletico de madrid" data-category="jogos"
+         onclick="playChannel('https://aipapai.shop/_temp/sportv.m3u8', 'Seattle Sounders x Atletico de Madrid', 'https://i.imgur.com/rwdlg0I.png')">
+      <img src="https://i.imgur.com/rwdlg0I.png"
+           class="w-24 h-24 object-contain mb-2" />
+      <span class="text-center text-sm font-medium">Seattle Sounders x Atletico de Madrid</span>
+    </div>
+
+    <div id="Fut4" class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
+         data-name="psg x botafogo" data-category="jogos"
+         onclick="playChannel('https://aipapai.shop/_temp/sportv.m3u8', 'PSG x Botafogo', 'https://i.imgur.com/rwdlg0I.png')">
+      <img src="https://i.imgur.com/rwdlg0I.png"
+           class="w-24 h-24 object-contain mb-2" />
+      <span class="text-center text-sm font-medium">PSG x Botafogo</span>
+    </div>
+    
+    <!-- Canais Fixos -->
     <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
          data-name="globosp" data-category="globos"
-         onclick="playChannel('https://aipapai.shop/_temp/globosp.m3u8', 'Gobo SP', 'https://i.imgur.com/aYKmlmc.png')">
+         onclick="playChannel('https://aipapai.shop/_temp/globosp.m3u8', 'Globo SP', 'https://i.imgur.com/aYKmlmc.png')">
       <img src="https://i.imgur.com/aYKmlmc.png"
            class="w-24 h-24 object-contain mb-2" />
       <span class="text-center text-sm font-medium">Globo SP</span>
@@ -550,7 +609,7 @@
            class="w-24 h-24 object-contain mb-2" />
       <span class="text-center text-sm font-medium">Telecine Touch</span>
     </div>
-    
+
     <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
          data-name="telecine pipoca" data-category="filmes"
          onclick="playChannel('https://aipapai.shop/_temp/telecinepipoca.m3u8', 'Telecine Pipoca', 'https://i.imgur.com/WCiEiEi.png')">
@@ -681,7 +740,7 @@
 
     <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
          data-name="studio universal" data-category="filmes"
-         onclick="playChannel('https://aipapai.shop/_temp/studiouniversal.m3u8', 'Studio Universla', 'https://i.imgur.com/Kyfw3dt.png')">
+         onclick="playChannel('https://aipapai.shop/_temp/studiouniversal.m3u8', 'Studio Universal', 'https://i.imgur.com/Kyfw3dt.png')">
       <img src="https://i.imgur.com/Kyfw3dt.png"
            class="w-24 h-24 object-contain mb-2" />
       <span class="text-center text-sm font-medium">Studio Universal</span>
@@ -738,7 +797,6 @@
     <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
          data-name="discovery kids" data-category="desenhos"
          onclick="playChannel('https://aipapai.shop/_temp/discoverykids.m3u8', 'Discovery Kids', 'https://i.imgur.com/2zbN1or.png')">
-
       <img src="https://i.imgur.com/2zbN1or.png"
            class="w-24 h-24 object-contain mb-2" />
       <span class="text-center text-sm font-medium">Discovery Kids</span>
@@ -785,122 +843,229 @@
     </div>
   </main>
 
-       <!-- Player em tela cheia -->
-       <div id="playerOverlay" class="fixed inset-0 bg-black z-50 flex items-center justify-center hidden">
-         <video-js id="videoPlayer" class="video-js vjs-big-play-centered vjs-theme-urban w-full h-full" controls autoplay playsinline></video-js>
+  <!-- Player em tela cheia -->
+  <div id="playerOverlay" class="fixed inset-0 bg-black z-50 flex items-center justify-center hidden">
+    <video-js id="videoPlayer" class="video-js vjs-big-play-centered vjs-theme-urban w-full h-full" controls autoplay playsinline></video-js>
 
-         <!-- Barra superior com ícone, nome e fechar -->
-         <div id="playerHeader">
-           <img id="channelIcon" src="" alt="Ícone do canal" />
-           <div class="channel-name" id="channelName"></div>
-           <button class="close-btn" onclick="closePlayer()">✖</button>
-         </div>
-       </div>
+    <!-- Barra superior com ícone, nome e fechar -->
+    <div id="playerHeader">
+      <img id="channelIcon" src="" alt="Ícone do canal" />
+      <div class="channel-name" id="channelName"></div>
+      <button class="close-btn" onclick="closePlayer()">✖</button>
+    </div>
+  </div>
 
-       <!-- Script -->
-       <script>
-         let currentCategory = 'todos';
-         let hls = null;
-         let player = null;
+  <!-- Script -->
+  <script>
+    let currentCategory = 'todos';
+    let hls = null;
+    let player = null;
 
-         // Elementos da barra do canal
-         const playerOverlay = document.getElementById('playerOverlay');
-         const playerHeader = document.getElementById('playerHeader');
-         const channelNameEl = document.getElementById('channelName');
-         const channelIconEl = document.getElementById('channelIcon');
+    // Elementos da barra do canal
+    const playerOverlay = document.getElementById('playerOverlay');
+    const playerHeader = document.getElementById('playerHeader');
+    const channelNameEl = document.getElementById('channelName');
+    const channelIconEl = document.getElementById('channelIcon');
+    const notification = document.getElementById('notification');
 
-         function playChannel(url, name, icon) {
-           const overlay = playerOverlay;
-           const clickSound = document.getElementById('clickSound');
+    // Configuração dos canais temporários
+    const temporaryChannels = [
+      {
+        id: 'Fut1',
+        name: 'Palmeiras x Al Ahly',
+        startTime: '2025-06-19T12:55:00',
+        endTime: '2025-06-19T15:15:00'
+      },
+      {
+        id: 'Fut2',
+        name: 'Inter Miami x Porto',
+        startTime: '2025-06-19T15:40:00',
+        endTime: '2025-06-19T18:10:00'
+      },
+      {
+        id: 'Fut3',
+        name: 'Seattle Sounders x Atletico de Madrid',
+        startTime: '2025-06-19T18:55:00',
+        endTime: '2025-06-19T21:00:00'
+      },
+      {
+        id: 'Fut4',
+        name: 'PSG x Botafogo',
+        startTime: '2025-06-19T21:55:00',
+        endTime: '2025-06-20T00:00:00'
+      }
+      // Adicione mais canais temporários aqui, por exemplo:
+      // {
+      //   id: 'novoCanalChannel',
+      //   name: 'Novo Canal',
+      //   startTime: '2025-06-19T17:00:00',
+      //   endTime: '2025-06-19T19:00:00'
+      // }
+    ];
 
-           clickSound.currentTime = 0;
-           clickSound.play();
+    // Função para exibir notificação
+    function showNotification(message) {
+      notification.textContent = message;
+      notification.classList.remove('hidden');
+      notification.classList.add('show');
+      setTimeout(() => {
+        notification.classList.remove('show');
+        setTimeout(() => notification.classList.add('hidden'), 300);
+      }, 5000);
+    }
 
-           // Atualiza barra do canal
-           channelNameEl.textContent = name;
-           channelIconEl.src = icon;
+    // Função para verificar o estado de um canal temporário (em horário de Brasília)
+    function getTemporaryChannelState(channel) {
+      const now = new Date();
+      const brtTime = new Date(now.toLocaleString('en-US', { timeZone: 'America/Sao_Paulo' }));
+      const start = new Date(channel.startTime);
+      start.setFullYear(brtTime.getFullYear()); // Ajusta o ano para o atual
+      const end = new Date(channel.endTime);
+      end.setFullYear(brtTime.getFullYear()); // Ajusta o ano para o atual
+      if (brtTime < start) return 'before';
+      if (brtTime >= start && brtTime <= end) return 'during';
+      return 'after';
+    }
 
-           overlay.classList.remove('hidden');
-           setTimeout(() => overlay.classList.add('active'), 10);
+    // Função para atualizar a visibilidade dos canais temporários
+    function updateTemporaryChannelsVisibility() {
+      temporaryChannels.forEach(channel => {
+        const channelElement = document.getElementById(channel.id);
+        if (channelElement) {
+          const state = getTemporaryChannelState(channel);
+          // Oculta completamente se estiver fora do período (após o fim)
+          channelElement.style.display = state === 'after' ? 'none' : 'flex';
+        }
+      });
+      filterChannels(); // Reaplica o filtro para garantir consistência
+    }
 
-           if (!player) {
-             player = videojs('videoPlayer', {
-               techOrder: ['html5'],
-               controlBar: {
-                 pictureInPictureToggle: false
-               }
-             });
+    // Inicializa a visibilidade dos canais ao carregar a página
+    updateTemporaryChannelsVisibility();
 
-             // Quando os controles aparecem ou desaparecem, sincroniza a barra do canal
-             player.on('useractive', () => {
-               playerHeader.classList.remove('hide');
-             });
-             player.on('userinactive', () => {
-               playerHeader.classList.add('hide');
-             });
-           }
+    // Atualiza a visibilidade a cada minuto
+    setInterval(updateTemporaryChannelsVisibility, 60000);
 
-           if (hls) {
-             hls.destroy();
-             hls = null;
-           }
+    function playChannel(url, name, icon) {
+      const overlay = playerOverlay;
+      const clickSound = document.getElementById('clickSound');
 
-           if (Hls.isSupported()) {
-             hls = new Hls();
-             hls.loadSource(url);
-             hls.attachMedia(player.tech().el_);
-             hls.on(Hls.Events.MANIFEST_PARSED, () => player.play());
-           } else {
-             player.src({ src: url, type: 'application/x-mpegURL' });
-             player.play();
-           }
+      // Verifica se o canal é temporário e está fora do horário permitido
+      const tempChannel = temporaryChannels.find(ch => ch.name === name);
+      if (tempChannel && getTemporaryChannelState(tempChannel) !== 'during') {
+        showNotification(`Este canal só está disponível entre ${new Date(tempChannel.startTime).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })} e ${new Date(tempChannel.endTime).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })} de ${new Date(tempChannel.startTime).toLocaleDateString('pt-BR')} (horário de Brasília).`);
+        return;
+      }
 
-           if (overlay.requestFullscreen) overlay.requestFullscreen();
-           else if (overlay.webkitRequestFullscreen) overlay.webkitRequestFullscreen();
-           else if (overlay.msRequestFullscreen) overlay.msRequestFullscreen();
-         }
+      clickSound.currentTime = 0;
+      clickSound.play();
 
-         function closePlayer() {
-           const overlay = playerOverlay;
+      // Atualiza barra do canal
+      channelNameEl.textContent = name;
+      channelIconEl.src = icon;
 
-           overlay.classList.remove('active');
-           setTimeout(() => overlay.classList.add('hidden'), 300);
+      overlay.classList.remove('hidden');
+      setTimeout(() => overlay.classList.add('active'), 10);
 
-           if (player) {
-             player.pause();
-             player.src('');
-           }
+      if (!player) {
+        player = videojs('videoPlayer', {
+          techOrder: ['html5'],
+          controlBar: {
+            pictureInPictureToggle: false
+          }
+        });
 
-           if (hls) {
-             hls.destroy();
-             hls = null;
-           }
+        // Quando os controles aparecem ou desaparecem, sincroniza a barra do canal
+        player.on('useractive', () => {
+          playerHeader.classList.remove('hide');
+        });
+        player.on('userinactive', () => {
+          playerHeader.classList.add('hide');
+        });
+      }
 
-           if (document.fullscreenElement) document.exitFullscreen();
-         }
+      if (hls) {
+        hls.destroy();
+        hls = null;
+      }
 
-         function filterChannels() {
-           const search = document.getElementById('searchInput').value.toLowerCase();
-           document.querySelectorAll('.channel').forEach(el => {
-             const name = el.getAttribute('data-name');
-             const cat = el.getAttribute('data-category');
-             const matchSearch = name.includes(search);
-             const matchCat = currentCategory === 'todos' || currentCategory === cat;
-             el.style.display = matchSearch && matchCat ? 'flex' : 'none';
-           });
-         }
+      if (Hls.isSupported()) {
+        hls = new Hls();
+        hls.loadSource(url);
+        hls.attachMedia(player.tech().el_);
+        hls.on(Hls.Events.MANIFEST_PARSED, () => player.play());
+      } else {
+        player.src({ src: url, type: 'application/x-mpegURL' });
+        player.play();
+      }
 
-         function setCategory(cat) {
-           currentCategory = cat;
-           document.querySelectorAll('.category-btn').forEach(btn => {
-             btn.classList.remove('bg-blue-600');
-             btn.classList.add('bg-gray-700');
-           });
-           event.target.classList.remove('bg-gray-700');
-           event.target.classList.add('bg-blue-600');
-           filterChannels();
-         }
-       </script>
+      if (overlay.requestFullscreen) overlay.requestFullscreen();
+      else if (overlay.webkitRequestFullscreen) overlay.webkitRequestFullscreen();
+      else if (overlay.msRequestFullscreen) overlay.msRequestFullscreen();
+    }
 
-     </body>
-     </html>
+    function closePlayer() {
+      const overlay = playerOverlay;
+
+      overlay.classList.remove('active');
+      setTimeout(() => overlay.classList.add('hidden'), 300);
+
+      if (player) {
+        player.pause();
+        player.src('');
+      }
+
+      if (hls) {
+        hls.destroy();
+        hls = null;
+      }
+
+      if (document.fullscreenElement) document.exitFullscreen();
+    }
+
+    function filterChannels() {
+      const search = document.getElementById('searchInput').value.toLowerCase();
+      document.querySelectorAll('.channel').forEach(el => {
+        const name = el.getAttribute('data-name');
+        const cat = el.getAttribute('data-category');
+        const matchSearch = name.includes(search);
+
+        // Para canais temporários, verifica o estado
+        const tempChannel = temporaryChannels.find(ch => ch.name.toLowerCase() === name);
+        let isVisible = true;
+        let matchCat = currentCategory === 'todos' || currentCategory === cat;
+
+        if (tempChannel) {
+          const state = getTemporaryChannelState(tempChannel);
+          if (state === 'after') {
+            isVisible = false; // Oculta completamente após o período
+            matchCat = false; // Garante que não aparece em nenhuma categoria
+          } else if (state === 'before') {
+            isVisible = true; // Visível antes do período
+            matchCat = currentCategory === 'jogos'; // Só aparece na categoria "jogos"
+          } else if (state === 'during') {
+            isVisible = true; // Visível durante o período
+            matchCat = currentCategory === 'todos' || currentCategory === 'jogos'; // Aparece em "todos" e "jogos"
+          }
+        } else {
+          // Para canais não temporários, mantém comportamento original
+          matchCat = currentCategory === 'todos' || currentCategory === cat;
+        }
+
+        el.style.display = matchSearch && matchCat && isVisible ? 'flex' : 'none';
+      });
+    }
+
+    function setCategory(cat) {
+      currentCategory = cat;
+      document.querySelectorAll('.category-btn').forEach(btn => {
+        btn.classList.remove('bg-blue-600');
+        btn.classList.add('bg-gray-700');
+      });
+      event.target.classList.remove('bg-gray-700');
+      event.target.classList.add('bg-blue-600');
+      filterChannels();
+    }
+  </script>
+</body>
+</html>
