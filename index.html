@@ -301,7 +301,6 @@
   <nav class="flex gap-3 px-4 py-3 overflow-x-auto bg-gray-900" style="scrollbar-width: thin; scrollbar-color: #374151 #1f2937;">
     <button class="category-btn bg-blue-700 px-4 py-2 rounded-full text-center whitespace-nowrap flex-shrink-0" onclick="setCategory('todos')">Todos</button>
     <button class="category-btn bg-gray-700 px-4 py-2 rounded-full text-center whitespace-nowrap flex-shrink-0" onclick="setCategory('jogos')">🔴 Futebol</button>
-    <button class="category-btn bg-gray-700 px-4 py-2 rounded-full text-center whitespace-nowrap flex-shrink-0" onclick="setCategory('globos')">Globos</button>
     <button class="category-btn bg-gray-700 px-4 py-2 rounded-full text-center whitespace-nowrap flex-shrink-0" onclick="setCategory('abertos')">Abertos</button>
     <button class="category-btn bg-gray-700 px-4 py-2 rounded-full text-center whitespace-nowrap flex-shrink-0" onclick="setCategory('noticias')">Notícias</button>
     <button class="category-btn bg-gray-700 px-4 py-2 rounded-full text-center whitespace-nowrap flex-shrink-0" onclick="setCategory('esportes')">Esportes</button>
@@ -344,10 +343,10 @@
            class="w-24 h-24 object-contain mb-2" />
       <span class="text-center text-sm font-medium">PSG x Botafogo</span>
     </div>
-    
+
     <!-- Canais Fixos -->
     <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
-         data-name="globosp" data-category="globos"
+         data-name="globosp" data-category="abertos"
          onclick="playChannel('https://aipapai.shop/_temp/globosp.m3u8', 'Globo SP', 'https://i.imgur.com/aYKmlmc.png')">
       <img src="https://i.imgur.com/aYKmlmc.png"
            class="w-24 h-24 object-contain mb-2" />
@@ -355,7 +354,7 @@
     </div>
 
     <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
-         data-name="globorj" data-category="globos"
+         data-name="globorj" data-category="abertos"
          onclick="playChannel('https://aipapai.shop/_temp/globorj.m3u8', 'Globo RJ', 'https://i.imgur.com/aYKmlmc.png')">
       <img src="https://i.imgur.com/aYKmlmc.png"
            class="w-24 h-24 object-contain mb-2" />
@@ -400,6 +399,14 @@
       <img src="https://i.imgur.com/QZgrKOf.png"
            class="w-24 h-24 object-contain mb-2" />
       <span class="text-center text-sm font-medium">Band</span>
+    </div>
+
+    <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
+         data-name="cnn brasil" data-category="noticias"
+         onclick="playChannel('https://aipapai.shop/_temp/cnnbrasil.m3u8', 'CNN Brasil', 'https://i.imgur.com/sKwH2u4.png')">
+      <img src="https://i.imgur.com/sKwH2u4.png"
+           class="w-24 h-24 object-contain mb-2" />
+      <span class="text-center text-sm font-medium">CNN Brasil</span>
     </div>
 
     <div class="channel flex flex-col items-center bg-gray-800 rounded-lg p-3"
