@@ -30,4 +30,4 @@ O PrimeCast está em desenvolvimento contínuo. Em breve será possível baixar 
 
 ## 📃 Licença
 
-© 2025 [Hyldraw](https://github.com/Hyldraw). Todos os direitos reservados.
+© 2025 [Hyldraw](https://github.com/Hyldraw) / Todos os direitos reservados.
