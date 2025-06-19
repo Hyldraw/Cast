@@ -960,7 +960,7 @@
       // Verifica se o canal é temporário e está fora do horário permitido
       const tempChannel = temporaryChannels.find(ch => ch.name === name);
       if (tempChannel && getTemporaryChannelState(tempChannel) !== 'during') {
-        showNotification(`Este canal só está disponível entre ${new Date(tempChannel.startTime).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })} e ${new Date(tempChannel.endTime).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })} de ${new Date(tempChannel.startTime).toLocaleDateString('pt-BR')} (horário de Brasília).`);
+        showNotification(`A partida terá início às ${new Date(tempChannel.startTime).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })} e encerramento às ${new Date(tempChannel.endTime).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })} do dia ${new Date(tempChannel.startTime).toLocaleDateString('pt-BR')} conforme o horário de Brasília.`);
         return;
       }
 
